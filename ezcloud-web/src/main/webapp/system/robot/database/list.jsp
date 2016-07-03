@@ -25,10 +25,10 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<cc:message key="framework.nav.index" /> &raquo;<cc:message key="framework.nav.i18n" />
+		代码管理 &raquo;数据库列表
 		<span><cc:message key="admin.page.total" args="${page.total}"/></span>
 	</div>
-	<form id="listForm" action="International.do" method="get">
+	<form id="listForm" action="list.do" method="get">
 		<div class="bar">
 			<a href="add.do" class="iconButton">
 				<span class="addIcon">&nbsp;</span><cc:message key="admin.common.add" />
@@ -71,14 +71,9 @@ $().ready(function() {
 				<div class="popupMenu">
 					<ul id="searchPropertyOption">
 						<li>
-							<a href="javascript:;" <c:if test="${page.searchProperty == 'RES_ITEM'}"> class="current"</c:if> val="RES_ITEM"><cc:message key="framework.i18n.res_item" /></a>
+							<a href="javascript:;" <c:if test="${page.searchProperty == 'DB_NAME'}"> class="current"</c:if> val="DB_NAME">数据库名字</a>
 						</li>
-						<li>
-							<a href="javascript:;" <c:if test="${page.searchProperty == 'LAN_NO'}">class="current"</c:if> val="LAN_NO"><cc:message key="framework.i18n.lan_no" /></a>
-						</li>
-						<li>
-							<a href="javascript:;" <c:if test="${page.searchProperty == 'RES'}">class="current"</c:if> val="RES"><cc:message key="framework.i18n.res" /></a>
-						</li>
+						
 					</ul>
 				</div>
 			</div>
@@ -89,10 +84,10 @@ $().ready(function() {
 					<input type="checkbox" id="selectAll" />
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="RES_ITEM">数据库名字</a>
+					<a href="javascript:;" class="sort" name="DB_NAME">数据库名字</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="LAN_NO">类型</a>
+					<a href="javascript:;" class="sort" name="TYPE">类型</a>
 				</th>
 				<th>
 					<span><cc:message key="admin.common.handle" /></span>
@@ -101,19 +96,22 @@ $().ready(function() {
 			<c:forEach items="${page.content}" var="row" varStatus="status">
 				<tr>
 					<td>
-						<input type="checkbox" name="ids" value="${row.RES_ITEM}@${row.LAN_NO}" />
+						<input type="checkbox" name="ids" value="${row.ID}@${row.ID}" />
 					</td>
 					<td>
-						<span title="${row.RES_ITEM}">${row.RES_ITEM}</span>
+						<span title="${row.DB_NAME}">${row.DB_NAME}</span>
 					</td>
 					<td>
-						${row.LAN_NO}
+						<c:choose>
+							<c:when test="${row.TYPE == 1}">MySQL</c:when>
+							<c:when test="${row.TYPE == 2}">SqlServer</c:when>
+							<c:when test="${row.TYPE == 3}">Oracle</c:when>
+							<c:otherwise>--</c:otherwise>
+						</c:choose>
+						
 					</td>
 					<td>
-						${row.RES}
-					</td>
-					<td>
-						<a href="edit.do?RES_ITEM=${row.RES_ITEM}&LAN_NO=${row.LAN_NO}"><cc:message key="admin.common.edit" /></a>
+						<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>
 					</td>
 				</tr>
 			</c:forEach>

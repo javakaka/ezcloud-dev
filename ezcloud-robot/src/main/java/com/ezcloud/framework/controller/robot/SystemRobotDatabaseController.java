@@ -22,7 +22,7 @@ import com.ezcloud.framework.util.Message;
 import com.ezcloud.framework.vo.Row;
 
 @Controller("frameworkSystemRobotDatabaseController")
-@RequestMapping("/system/robot/databse")
+@RequestMapping("/system/robot/database")
 public class SystemRobotDatabaseController  extends BaseController{
 
 	private static final String TABLE_NAME="system_robot_database";
@@ -35,7 +35,7 @@ public class SystemRobotDatabaseController  extends BaseController{
 
 	@RequestMapping(value = "/add")
 	public String add(ModelMap model) {
-		return "/system/robot/databse/add";
+		return "/system/robot/database/add";
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -46,11 +46,19 @@ public class SystemRobotDatabaseController  extends BaseController{
 		return "redirect:list.do";
 	}
 	
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/list")
 	public String list(Pageable pageable, ModelMap model) {
 		Page page =databaseService.queryPage( pageable );
 		model.addAttribute("page", page);
-		return "/system/robot/databse/list";
+		return "/system/robot/database/list";
+	}
+	
+	
+	@RequestMapping(value = "/edit")
+	public String edit(String id,ModelMap model) {
+		Row row =databaseService.find( id );
+		model.addAttribute("row", row);
+		return "/system/robot/database/edit";
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -60,7 +68,7 @@ public class SystemRobotDatabaseController  extends BaseController{
 		return "redirect:list.do";
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete")
 	@ResponseBody 
 	public int delete(String id) {
 		int rowNum =0;

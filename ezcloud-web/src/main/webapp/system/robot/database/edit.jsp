@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title><cc:message key="framework.i18n.edit"/></title>
+<title>编辑数据库</title>
 <link href="<%=basePath%>/res/admin/css/common.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery.validate.js"></script>
@@ -35,32 +35,52 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<cc:message key="framework.nav.index" /> &raquo; <cc:message key="framework.i18n.edit"/>
+		代码管理 &raquo; 编辑数据库
 	</div>
 	<form id="inputForm" action="update.do" method="post">
+		<input type="hidden" name="id" class="text" value="${row.ID }" maxlength="200" />
 		<table class="input">
 			<tr>
 				<th>
-					<span class="requiredField">*</span><cc:message key="framework.i18n.res_item" />:
+					<span class="requiredField">*</span>数据库类型:
 				</th>
 				<td>
-					<input type="text" name="RES_ITEM" class="text" value="${ovo.RES_ITEM}" maxlength="200" readonly/>
+					<select id="type" name="type" class="text" style="width:190px;" >
+					<c:choose>
+							<c:when test="${row.TYPE == 1}">
+								<option value="" >请选择</option>
+								<option value="1" selected>MySQL</option>
+								<option value="2" >SqlServer</option>
+								<option value="3" >Oracle</option>
+							</c:when>
+							<c:when test="${row.TYPE == 2}">
+								<option value="" >请选择</option>
+								<option value="1" >MySQL</option>
+								<option value="2" selected>SqlServer</option>
+								<option value="3" >Oracle</option>
+							</c:when>
+							<c:when test="${row.TYPE == 3}">
+								<option value="" >请选择</option>
+								<option value="1" >MySQL</option>
+								<option value="2" >SqlServer</option>
+								<option value="3" selected>Oracle</option>
+							</c:when>
+							<c:otherwise>
+								<option value="" selected>请选择</option>
+								<option value="1" >MySQL</option>
+								<option value="2" >SqlServer</option>
+								<option value="3" >Oracle</option>
+							</c:otherwise>
+						</c:choose>
+					</select>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					<cc:message key="framework.i18n.lan_no" />:
+					<span class="requiredField">*</span>数据库名字:
 				</th>
 				<td>
-					<input type="text" name="LAN_NO" class="text" value="${ovo.LAN_NO}" maxlength="200" readonly/>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<cc:message key="framework.i18n.res" />:
-				</th>
-				<td>
-					<input type="text" name="RES" class="text" value="${ovo.RES}" maxlength="200" />
+					<input type="text" name="db_name" class="text" value="${row.DB_NAME }" maxlength="200" />
 				</td>
 			</tr>
 			<tr>

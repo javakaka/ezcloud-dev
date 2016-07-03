@@ -19,12 +19,12 @@ public class SystemRobotDatabaseService  extends JdbcService{
 	 */
 	public Page queryPage( Pageable pageable ) {
 		Page page = null;
-		sql = "select * from fm_international_language where 1=1 ";
+		sql = "select * from system_robot_database where 1=1 ";
 		String restrictions = addRestrictions(pageable);
 		String orders = addOrders(pageable);
 		sql += restrictions;
 		sql += orders;
-		String countSql = "select count(*) from fm_international_language where 1=1 ";
+		String countSql = "select count(*) from system_robot_database where 1=1 ";
 		countSql += restrictions;
 		countSql += orders;
 		long total = count(countSql);
@@ -47,13 +47,13 @@ public class SystemRobotDatabaseService  extends JdbcService{
 	 */
 	public void save() {
 		Row row = new Row();
-		String LAN_NO = getRow().getString("LAN_NO", null);
+		String id = getRow().getString("id", null);
 		String LAN_NAME = getRow().getString("LAN_NAME", null);
 		String LAN_STATE = getRow().getString("LAN_STATE", null);
-		row.put("LAN_NO", LAN_NO);
+		row.put("id", id);
 		row.put("LAN_NAME", LAN_NAME);
 		row.put("LAN_STATE", LAN_STATE);
-		insert("fm_international_language", row);
+		insert("system_robot_database", row);
 	}
 	
 	/**
@@ -62,10 +62,9 @@ public class SystemRobotDatabaseService  extends JdbcService{
 	 * @return Row
 	 * @throws
 	 */
-	public Row find() {
+	public Row find(String id) {
 		Row row = new Row();
-		String LAN_NO = getRow().getString("LAN_NO");
-		sql = "select * from fm_international_language where LAN_NO='" + LAN_NO + "'";
+		sql = "select * from system_robot_database where id='" + id + "'";
 		row = queryRow(sql);
 		return row;
 	}
@@ -76,13 +75,13 @@ public class SystemRobotDatabaseService  extends JdbcService{
 	 * @return void
 	 */
 	public void update() {
-		String LAN_NO = getRow().getString("LAN_NO", null);
+		String id = getRow().getString("id", null);
 		String LAN_NAME = getRow().getString("LAN_NAME", null);
 		String LAN_STATE = getRow().getString("LAN_STATE", null);
 		Row row = new Row();
 		row.put("LAN_NAME", LAN_NAME);
 		row.put("LAN_STATE", LAN_STATE);
-		update("fm_international_language", row, "LAN_NO='" + LAN_NO + "'");
+		update("system_robot_database", row, "id='" + id + "'");
 	}
 	
 	
@@ -103,7 +102,7 @@ public class SystemRobotDatabaseService  extends JdbcService{
 				}
 				id += "'" + String.valueOf(ids[i]) + "'";
 			}
-			sql = "delete from fm_international_language where lan_no in(" + id + ")";
+			sql = "delete from system_robot_database where id in(" + id + ")";
 			rowNum =update(sql);
 		}
 		return rowNum;
@@ -112,7 +111,7 @@ public class SystemRobotDatabaseService  extends JdbcService{
 	public DataSet queryAllItems()
 	{
 		DataSet ds =new DataSet();
-		String sql ="select * from fm_international_language where lan_state='1' ";
+		String sql ="select * from system_robot_database where lan_state='1' ";
 		ds =queryDataSet(sql);
 		return ds;
 	}

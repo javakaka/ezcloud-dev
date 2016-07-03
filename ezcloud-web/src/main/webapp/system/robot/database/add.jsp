@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title><cc:message key="framework.il8n.add"/></title>
+<title>添加数据库</title>
 <link href="<%=basePath%>/res/admin/css/common.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery.validate.js"></script>
@@ -35,42 +35,29 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<cc:message key="framework.nav.index" /> &raquo; <cc:message key="framework.il8n.add"/>
+		代码管理 &raquo; 添加数据库
 	</div>
 	<form id="inputForm" action="save.do" method="post">
 		<table class="input">
 			<tr>
 				<th>
-					<span class="requiredField">*</span><cc:message key="framework.i18n.res_item" />:
+					<span class="requiredField">*</span>数据库类型:
 				</th>
 				<td>
-					<select id="RES_ITEM" name="RES_ITEM" class="text" style="width:190px;" >
-						<option value="" >请选择词条</option>
-						<c:forEach items="${item_list}" var="row" varStatus="status">
-							<option value="${row.RES_ITEM}" >${row.RES_ITEM}</option>
-						</c:forEach>
+					<select id="type" name="type" class="text" style="width:190px;" >
+						<option value="" >请选择</option>
+						<option value="1" >MySQL</option>
+						<option value="2" >SqlServer</option>
+						<option value="3" >Oracle</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					<span class="requiredField">*</span><cc:message key="framework.i18n.lan_no" />:
+					<span class="requiredField">*</span>数据库名字:
 				</th>
 				<td>
-					<select id="LAN_NO" name="LAN_NO" class="text" style="width:190px;" >
-						<option value="" >请选择语言</option>
-						<c:forEach items="${lan_list}" var="row" varStatus="status">
-							<option value="${row.LAN_NO}" >${row.LAN_NAME}</option>
-						</c:forEach>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span><cc:message key="framework.i18n.res" />:
-				</th>
-				<td>
-					<input type="text" name="RES" class="text" value="" maxlength="200" />
+					<input type="text" name="db_name" class="text" value="" maxlength="200" />
 				</td>
 			</tr>
 			<tr>
