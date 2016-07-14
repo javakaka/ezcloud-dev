@@ -1,2 +1,6 @@
 *.class
 *.DS_Store
+*.classpath
+*.classpath
+ezcloud-web/.classpath
+ezcloud-cxhl/.classpath

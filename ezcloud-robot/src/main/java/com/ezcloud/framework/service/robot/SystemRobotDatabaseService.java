@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.service.JdbcService;
+import com.ezcloud.framework.util.StringUtil;
 import com.ezcloud.framework.vo.DataSet;
 import com.ezcloud.framework.vo.Row;
 
@@ -111,7 +112,27 @@ public class SystemRobotDatabaseService  extends JdbcService{
 	public DataSet queryAllItems()
 	{
 		DataSet ds =new DataSet();
-		String sql ="select * from system_robot_database where lan_state='1' ";
+		String sql ="select * from system_robot_database ";
+		ds =queryDataSet(sql);
+		return ds;
+	}
+	
+	/**
+	 * 查询指定数据库的全部表名字 
+	 * @param dbType 数据库类型。1 mysql,2 sql server,3 oracle
+	 * @param dbName 数据库名字
+	 * @return
+	 */
+	public DataSet queryTablesFromDatabase(String dbType, String dbName)
+	{
+		DataSet ds =new DataSet();
+		String sql =null;
+		if ( StringUtil.isEmptyOrNull( dbType ) ) {
+			dbType ="1";
+		}
+		if ( dbType.equals( "1" ) ) {
+			sql =" select table_name from information_schema.tables where table_schema = '"+dbName+"' ";
+		}
 		ds =queryDataSet(sql);
 		return ds;
 	}

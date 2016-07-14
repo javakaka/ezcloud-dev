@@ -19,6 +19,8 @@ import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.service.robot.SystemRobotDatabaseService;
 import com.ezcloud.framework.util.MapUtils;
 import com.ezcloud.framework.util.Message;
+import com.ezcloud.framework.util.ResponseVO;
+import com.ezcloud.framework.vo.DataSet;
 import com.ezcloud.framework.vo.Row;
 
 @Controller("frameworkSystemRobotDatabaseController")
@@ -75,6 +77,21 @@ public class SystemRobotDatabaseController  extends BaseController{
 		Assert.notNull(id, "id不能为空!");
 		rowNum=databaseService.delete(id);
 		return rowNum;
+	}
+	
+	@RequestMapping(value = "/query-tables")
+	@ResponseBody
+	public ResponseVO queryTablesFromDatabase(String id) {
+		ResponseVO ovo =new ResponseVO();
+		Row db =null;
+		Assert.notNull(id, "id不能为空!");
+		db=databaseService.find( id );
+		String dbName =db.getString( "db_name" );
+		String dbType =db.getString( "db_type" );
+		DataSet tableDs =databaseService.queryTablesFromDatabase( dbType, dbName );
+		ovo.setCode( 0 );
+		ovo.oForm.put( "table_list", tableDs );
+		return ovo;
 	}
 	
 }

@@ -387,6 +387,12 @@
 			<groupId>com.ezcloud.dev</groupId>
 			<artifactId>ezcloud-base</artifactId>
 			<version>1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.wltea.ik-analyzer</groupId>
+					<artifactId>ik-analyzer</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
   	</dependencies>
   	<build>

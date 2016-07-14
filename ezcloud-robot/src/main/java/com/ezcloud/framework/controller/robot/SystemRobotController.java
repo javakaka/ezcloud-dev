@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ezcloud.framework.controller.BaseController;
+import com.ezcloud.framework.service.robot.SystemRobotDatabaseService;
 import com.ezcloud.framework.service.robot.SystemRobotService;
+import com.ezcloud.framework.vo.DataSet;
 
 @Controller("frameworkSystemRobotController")
 @RequestMapping("/system/robot")
@@ -17,9 +19,16 @@ public class SystemRobotController  extends BaseController{
 
 	@Resource(name = "frameworkSystemRobotService")
 	private SystemRobotService robotService;
+	
+	@Resource(name = "frameworkSystemRobotDatabaseService")
+	private SystemRobotDatabaseService databaseService;
+	
 
 	@RequestMapping(value = "/add")
 	public String add(ModelMap model) {
+		// 查询db列表
+		DataSet dbDs=databaseService.queryAllItems();
+		model.addAttribute( "db_list", dbDs );
 		return "/system/robot/add";
 	}
 	
