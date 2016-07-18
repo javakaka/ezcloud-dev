@@ -80,6 +80,50 @@ function tableClick( tableName, obj){
 	// reset selected
 	$(".table-item").removeClass("selected");
 	$this.addClass("selected");
+	var db_id =$("#curDatabase").val();
+	if( typeof db_id == "undefined" || db_id==""){
+		
+		alert("请选择数据库或者新建数据库!");
+		return false;
+	}
+	var tbName =tableName;
+	var params ={dbId: db_id,tableName:tbName};
+	var url ="<%=basePath%>" +"system/robot/database/query-fields.do";
+	$.ajax({
+		url: url,
+		type: "POST",
+		data: params,
+		dataType: "json",
+		cache: false,
+		beforeSend: function (XMLHttpRequest){
+		},
+		success: function(ovo, textStatus) {
+			var code =ovo.code;
+			if(code >=0)
+			{
+				var tableList =ovo.oForm.FIELD_LIST;
+				var itemHtml ="";
+				$.each(tableList, function (i,item){
+					itemHtml +="<div class=\"field-item\" title=\""+item.COLUMN_COMMENT+"\">";
+					itemHtml +="<div class=\"field-td field-w4\">"+item.COLUMN_NAME+"</div>";
+					itemHtml +="<div class=\"field-td field-w2\">"+item.COLUMN_TYPE+"</div>";
+					itemHtml +="<div class=\"field-td field-w2\">"+item.IS_NULLABLE+"</div>";
+					itemHtml +="<div class=\"field-td field-w2\">"+item.COLUMN_KEY+"</div>";
+					itemHtml +="</div>";
+				});
+				$("#fieldList").html( itemHtml );
+			}
+			else
+			{
+				$.message("error",ovo.msg);
+			}
+		},
+		complete: function (XMLHttpRequest, textStatus){
+		},
+		error: function (){
+			alert('error...');
+		}
+	});
 	
 }
 </script>
@@ -109,7 +153,7 @@ overflow-y: scroll;
     overflow-y: scroll;
 }
 .code{
-	width: 58%;
+	min-width: 460px;
     height: 100%;
 }
 
@@ -204,6 +248,11 @@ max-height: 800px;
 	width: 100px;
 }
 
+.page-item {
+    width: 100%;
+    border-bottom: 1px solid #352d2d;
+    border-right: 1px solid #2d2828;
+}
 </style>
 </head>
 <body>
@@ -250,7 +299,40 @@ max-height: 800px;
 				</div>
 			</div>
 			<div id="right" class="left code">
-				<div id="config" class="page-item">配置项</div>
+				<div id="config" class="page-item">
+					<fieldset>
+						<legend>配置项</legend>
+						<div class="">
+							<label>数据库模版：</label>
+							<input type="radio" name="dbModel" value="jpa" checked="checked"/>JPA模式
+							<input type="radio" name="dbModel" value="jdbc"/>JDBC模式
+						</div>
+						<div class="">
+							<label>项目路径：</label>
+							<input type="textbox" name="project_path" value="" />
+						</div>
+						<div class="">
+							<label>Entity保存路径：</label>
+							<input type="textbox" name="entity_path" value="" />
+						</div>
+						<div class="">
+							<label>dao保存路径：</label>
+							<input type="textbox" name="dao_path" value="" />
+						</div>
+						<div class="">
+							<label>service保存路径：</label>
+							<input type="textbox" name="service_path" value="" />
+						</div>
+						<div class="">
+							<label>controller保存路径：</label>
+							<input type="textbox" name="controller_path" value="" />
+						</div>
+						<div class="">
+							<label>api保存路径：</label>
+							<input type="textbox" name="api_path" value="" />
+						</div>
+					</fieldset>
+				</div>
 				<div id="entity" class="page-item">模型</div>
 				<div id="listPage" class="page-item">列表界面</div>
 				<div id="addPage" class="page-item">添加界面</div>

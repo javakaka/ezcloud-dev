@@ -150,7 +150,7 @@ public class SystemRobotDatabaseService  extends JdbcService{
 		if ( StringUtil.isEmptyOrNull( tableName ) ) {
 			return null;
 		}
-		sql =" select column_name,data_type,column_default,is_nullable ,column_key,column_comment "
+		sql =" select column_name,data_type,column_default,is_nullable ,column_key,column_comment ,column_type "
 		+" from information_schema.COLUMNS where table_name='"+ tableName +"' "
 		+" and table_schema='" + dbName + "'";
 		ds =queryDataSet(sql);
