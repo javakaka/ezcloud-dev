@@ -55,7 +55,7 @@ function queryTablesFromDataBase()
 				var tableList =ovo.oForm.TABLE_LIST;
 				var itemHtml ="";
 				$.each(tableList, function (i,item){
-					itemHtml +="<div class=\"table-item\">"+item.TABLE_NAME+"</div>";
+					itemHtml +="<div class=\"table-item\" onclick=\"tableClick('"+item.TABLE_NAME+"', this)\">"+item.TABLE_NAME+"</div>";
 				});
 				$("#table_items").html( itemHtml );
 			}
@@ -70,6 +70,16 @@ function queryTablesFromDataBase()
 			alert('error...');
 		}
 	});
+	
+}
+
+// 点击表，加载字段
+function tableClick( tableName, obj){
+	var $this =$(obj);
+	//alert($this);
+	// reset selected
+	$(".table-item").removeClass("selected");
+	$this.addClass("selected");
 	
 }
 </script>
@@ -93,8 +103,13 @@ overflow-y: scroll;
 	border-right: red solid 1px;
 }
 
+.fields{
+	width: 304px;
+    height: 100%;
+    overflow-y: scroll;
+}
 .code{
-	width: 78%;
+	width: 58%;
     height: 100%;
 }
 
@@ -114,12 +129,81 @@ overflow-y: scroll;
     overflow-y: scroll;
 }
 
+.table-item-title {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #5d5656;
+    margin-bottom: -1px;
+    margin-left: -1px;
+    font-size: medium;
+    line-height: 26px;
+    font-weight: 600;
+}
 .table-item {
     width: 100%;
     height: 30px;
-    border: 1px solid red;
-    border-collapse: collapse;
+    border: 1px solid #5d5656;
+    margin-bottom: -1px;
+    margin-left: -1px;
+    font-size: medium;
+    line-height: 26px;
 }
+.field-item {
+    width: 100%;
+    height: 24px;
+    border: 1px solid #5d5656;
+    margin-bottom: -1px;
+    margin-left: -1px;
+    font-size: medium;
+    line-height: 24px;
+}
+
+.selected {
+	background-color: #d83131;
+    color: white;
+}
+
+.field-title {
+width: 100%;
+height: 50px;
+}
+
+.field-list {
+width: 100%;
+max-height: 800px;
+/*overflow-y: scroll;*/
+}
+.field-th {
+    float: left;
+    height: 50px;
+    line-height: 50px;
+    font-size: medium;
+    border-right: solid 1px #271e1e;
+}
+
+.field-td {
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    font-size: small;
+    border-right: solid 1px #271e1e;
+}
+
+.field-w1 {
+	width: 50px;
+}
+
+.field-w2 {
+	width: 60px;
+}
+
+.field-w3 {
+	width: 70px;
+}
+.field-w4 {
+	width: 100px;
+}
+
 </style>
 </head>
 <body>
@@ -138,11 +222,31 @@ overflow-y: scroll;
 					</select>
 					<input type="button" onclick="queryTablesFromDataBase()" value="连 接"></input>
 					</div>
+					<div class="table-item-title">Table 列表</div>
 				<div id="table_items" class="db-table ">
-					<div class="table-item">tb_user</div>
-					<div class="table-item">tb_user</div>
-					<div class="table-item">tb_user</div>
-					<div class="table-item">tb_user</div>
+					
+				</div>
+			</div>
+			<div id="center" class="left fields">
+				<div class="field-title">
+					<div class="field-th field-w4">字段名</div>
+					<div class="field-th field-w2">类型</div>
+					<div class="field-th field-w2">允许空</div>
+					<div class="field-th field-w2">约束</div>
+				</div>
+				<div class="field-list" id="fieldList">
+					<div class="field-item" title="remark">
+						<div class="field-td field-w4">id</div>
+						<div class="field-td field-w2">int</div>
+						<div class="field-td field-w2">NO</div>
+						<div class="field-td field-w2">PRI</div>
+					</div>
+					<div class="field-item" title="remark">
+						<div class="field-td field-w4">id</div>
+						<div class="field-td field-w2">int</div>
+						<div class="field-td field-w2">NO</div>
+						<div class="field-td field-w2">PRI</div>
+					</div>
 				</div>
 			</div>
 			<div id="right" class="left code">

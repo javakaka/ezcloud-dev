@@ -136,4 +136,24 @@ public class SystemRobotDatabaseService  extends JdbcService{
 		ds =queryDataSet(sql);
 		return ds;
 	}
+	
+	/**
+	 * 查询指定表的全部字段 
+	 * @param dbName 数据库名字
+	 * @param tableName 表名字
+	 * @return
+	 */
+	public DataSet queryFieldsFromTable(String dbName, String tableName)
+	{
+		DataSet ds =new DataSet();
+		String sql =null;
+		if ( StringUtil.isEmptyOrNull( tableName ) ) {
+			return null;
+		}
+		sql =" select column_name,data_type,column_default,is_nullable ,column_key,column_comment "
+		+" from information_schema.COLUMNS where table_name='"+ tableName +"' "
+		+" and table_schema='" + dbName + "'";
+		ds =queryDataSet(sql);
+		return ds;
+	}
 }

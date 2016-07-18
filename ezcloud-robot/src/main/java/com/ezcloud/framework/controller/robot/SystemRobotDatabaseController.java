@@ -94,4 +94,19 @@ public class SystemRobotDatabaseController  extends BaseController{
 		return ovo;
 	}
 	
+	@RequestMapping(value = "/query-fields")
+	@ResponseBody
+	public ResponseVO queryFieldsFromTable(String dbId, String tableName) {
+		ResponseVO ovo =new ResponseVO();
+		Row db =null;
+		Assert.notNull(dbId, "id不能为空!");
+		db=databaseService.find( dbId );
+		String dbName =db.getString( "db_name" );
+		Assert.notNull(tableName, "tableName不能为空!");
+		DataSet fieldDs =databaseService.queryFieldsFromTable( dbName, tableName );
+		ovo.setCode( 0 );
+		ovo.oForm.put( "field_list", fieldDs );
+		return ovo;
+	}
+	
 }
