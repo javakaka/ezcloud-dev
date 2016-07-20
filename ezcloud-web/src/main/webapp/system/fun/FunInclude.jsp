@@ -72,8 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</tbody>
 		</table>
 		<table id="addTable" class="list_include" >
-				<tr class="input tabContent">
-			<tr>
+			<tr class="input tabContent">
 				<th>
 					功能编号:
 				</th>

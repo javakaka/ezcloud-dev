@@ -314,6 +314,14 @@ var AttributeTypeSelectOptionHtml =" "
 			$("#sequenceName").attr("disabled","disabled");
 			$("#sequenceName").val("");
 		}
+	}
+	
+	/**
+	* 选择文件夹
+	* id 目标对象的id值 
+	*/
+	function chooseSystemFolder(id){
+		console.log('...........');
 		
 	}
 </script>
@@ -462,7 +470,7 @@ height: 30px;
 }
 .config-item .config-value {
     width: 400px;
-    display: block;
+    /* display: block; */
     text-align: left;
 }
 .entity-field-name {
@@ -499,6 +507,9 @@ height: 30px;
  float:left;
 }
 
+.choose-fold-btn {
+	width: 100px;
+}
 
 </style>
 </head>
@@ -556,31 +567,38 @@ height: 30px;
 						</div>
 						<div class="config-item">
 							<label class="config-label">项目路径：</label>
-							<input type="text" name="project_path" value="" class="config-value"/>
+							<input type="text" id="project_path" name="project_path" value="" class="config-value"/>
+							<input type="button" name="choose_path" value="选择..." class="choose-fold-btn" onclick="chooseSystemFolder('project_path')"/>
 						</div>
 						<div class="config-item">
 							<label class="config-label">Entity保存路径：</label>
-							<input type="text" name="entity_path" value="" class="config-value" />
+							<input type="text" id="entity_path" name="entity_path" value="" class="config-value" />
+							<input type="button" name="choose_path" value="选择..." class="choose-fold-btn" onclick="chooseSystemFolder('entity_path')"/>
 						</div>
 						<div class="config-item">
 							<label class="config-label">dao保存路径：</label>
-							<input type="text" name="dao_path" value="" class="config-value" />
+							<input type="text" id="dao_path" name="dao_path" value="" class="config-value" />
+							<input type="button" name="choose_path" value="选择..." class="choose-fold-btn" onclick="chooseSystemFolder('dao_path')"/>
 						</div>
 						<div class="config-item">
 							<label class="config-label">service保存路径：</label>
-							<input type="text" name="service_path" value="" class="config-value" />
+							<input type="text" id="service_path" name="service_path" value="" class="config-value" />
+							<input type="button" name="choose_path" value="选择..." class="choose-fold-btn" onclick="chooseSystemFolder('service_path')"/>
 						</div>
 						<div class="config-item">
 							<label class="config-label">controller保存路径：</label>
-							<input type="text" name="controller_path" value="" class="config-value" />
+							<input type="text" id="controller_path" name="controller_path" value="" class="config-value" />
+							<input type="button" name="choose_path" value="选择..." class="choose-fold-btn" onclick="chooseSystemFolder('controller_path')"/>
 						</div>
 						<div class="config-item">
 							<label class="config-label">api保存路径：</label>
-							<input type="text" name="api_path" value="" class="config-value" />
+							<input type="text" id="api_path" name="api_path" value="" class="config-value" />
+							<input type="button" name="choose_path" value="选择..." class="choose-fold-btn" onclick="chooseSystemFolder('api_path')"/>
 						</div>
 						<div class="config-item">
 							<label class="config-label">jsp页面保存路径：</label>
-							<input type="text" name="jsp_path" value="" class="config-value" />
+							<input type="text" id="jsp_path" name="jsp_path" value="" class="config-value" />
+							<input type="button" name="choose_path" value="选择..." class="choose-fold-btn" onclick="chooseSystemFolder('jsp_path')"/>
 						</div>
 					</fieldset>
 				</div>
