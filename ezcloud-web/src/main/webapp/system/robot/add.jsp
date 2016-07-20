@@ -120,43 +120,44 @@ function tableClick( tableName, obj){
 					entityHtml +="";
 					entityHtml +="    <div class=\"entity-item\">   ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<span>"+item.COLUMN_NAME+"</span>";
+					//entityHtml +="    	<span>"+item.COLUMN_NAME+"</span>";
+					entityHtml +="    	<input type=\"text\" name=\"columnName\" value=\""+item.COLUMN_NAME+"\" class=\"entity-field-name\" readonly /> ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">  ";
 					entityHtml +="    	<span>"+item.COLUMN_TYPE+"</span>  ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<input type=\"text\" name=\"entity_name\" value=\""+convertColumnNameToAttributeName( item.COLUMN_NAME )+"\" class=\"entity-field-name\"/> ";
+					entityHtml +="    	<input type=\"text\" id=\"attributeName"+item.COLUMN_NAME+"\" name=\"attributeName\" value=\""+convertColumnNameToAttributeName( item.COLUMN_NAME )+"\" class=\"entity-field-name\"/> ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<select name=\"\"  class=\"entity-field-name\">   ";
+					entityHtml +="    	<select id=\"attributeType"+item.COLUMN_NAME+"\" name=\"attributeType\"  class=\"entity-field-name\">   ";
 					entityHtml += AttributeTypeSelectOptionHtml;
-					entityHtml +="    	</select>         ";
+					entityHtml +="    	</select> ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<select name=\"\">        ";
+					entityHtml +="    	<select id=\"mappingKind"+item.COLUMN_NAME+"\"  name=\"mappingKind\"> ";
 					entityHtml +=getAttributeMappingKindOptionHtml( item.COLUMN_KEY );
-					entityHtml +="    	</select>         ";
+					entityHtml +="    	</select> ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<select name=\"\">        ";
+					entityHtml +="    	<select  id=\"updateable"+item.COLUMN_NAME+"\" name=\"updateable\"> ";
 					entityHtml +=UpdateableSelectOptionHtml;
-					entityHtml +="    	</select>         ";
+					entityHtml +="    	</select> ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<select name=\"\">        ";
+					entityHtml +="    	<select  id=\"insertable"+item.COLUMN_NAME+"\" name=\"insertable\">  ";
 					entityHtml +=InsertableSelectOptionHtml;
-					entityHtml +="    	</select>         ";
+					entityHtml +="    	</select> ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<select name=\"\">        ";
+					entityHtml +="    	<select  id=\"getterScope"+item.COLUMN_NAME+"\" name=\"getterScope\"> ";
 					entityHtml +=ScopeSelectOptionHtml;
 					entityHtml +="    	</select>         ";
 					entityHtml +="    </div> ";
 					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
-					entityHtml +="    	<select name=\"\">        ";
+					entityHtml +="    	<select  id=\"setterScope"+item.COLUMN_NAME+"\" name=\"setterScope\">  ";
 					entityHtml +=ScopeSelectOptionHtml;
-					entityHtml +="    	</select>         ";
+					entityHtml +="    	</select>  ";
 					entityHtml +="    </div> ";
 					entityHtml +="    </div> ";
 				});
@@ -576,6 +577,10 @@ height: 30px;
 						<div class="config-item">
 							<label class="config-label">api保存路径：</label>
 							<input type="text" name="api_path" value="" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">jsp页面保存路径：</label>
+							<input type="text" name="jsp_path" value="" class="config-value" />
 						</div>
 					</fieldset>
 				</div>

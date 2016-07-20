@@ -12,6 +12,7 @@
   <module>ezcloud-web</module>
   <module>ezcloud-cxhl</module>
   <module>ezcloud-robot</module>
+  <module>ezcloud-test</module>
   </modules>
   <dependencies>
   </dependencies>
