@@ -18,14 +18,17 @@ import com.ezcloud.framework.common.FileInfo;
 import com.ezcloud.framework.common.FileInfo.FileType;
 import com.ezcloud.framework.common.FileInfo.OrderType;
 import com.ezcloud.framework.service.system.SystemFileService;
+import com.ezcloud.framework.util.FileUtil;
 import com.ezcloud.framework.util.JsonUtils;
 import com.ezcloud.framework.util.Message;
+import com.ezcloud.framework.util.ResponseVO;
+import com.ezcloud.framework.util.StringUtil;
+import com.ezcloud.framework.vo.DataSet;
 
 /**
  * Controller - 文件处理
  */
 @Controller("frameworkSystemFileController")
-@RequestMapping("/upload/file")
 public class SystemFileController extends BaseController {
 
 	@Resource(name = "frameworkSystemFileService")
@@ -34,7 +37,7 @@ public class SystemFileController extends BaseController {
 	/**
 	 * 上传
 	 */
-	@RequestMapping(value = "/upload", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
+	@RequestMapping(value = "/upload/file/upload", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
 	public void upload(FileType fileType, MultipartFile file, HttpServletResponse response) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		if (!fileService.isValid(fileType, file)) {
@@ -60,10 +63,26 @@ public class SystemFileController extends BaseController {
 	/**
 	 * 浏览
 	 */
-	@RequestMapping(value = "/browser", method = RequestMethod.GET)
+	@RequestMapping(value = "/upload/file/browser", method = RequestMethod.GET)
 	public @ResponseBody
 	List<FileInfo> browser(String path, FileType fileType, OrderType orderType) {
 		return fileService.browser(path, fileType, orderType);
+	}
+	
+	/**
+	 * 浏览文件夹
+	 */
+	@RequestMapping(value = "/system/file/select-folder", method = RequestMethod.GET)
+	public @ResponseBody
+	ResponseVO selectFolder( String path ) {
+		ResponseVO ovo =new ResponseVO(0);
+		if ( StringUtil.isEmptyOrNull(path) ) {
+			path ="";
+		}
+		DataSet folders =FileUtil.listFolder(path);
+		ovo.oForm.put("folder_list", folders);
+		System.out.println("------------------->>>");
+		return ovo;
 	}
 
 }

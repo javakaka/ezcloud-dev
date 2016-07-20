@@ -4,18 +4,6 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="ezcloud-base-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ezcloud-base/ezcloud-base">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="ezcloud-cxhl-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ezcloud-cxhl/ezcloud-cxhl">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="ezcloud-robot-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ezcloud-robot/ezcloud-robot">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="ezcloud-test-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ezcloud-test/ezcloud-test">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/ezlcoud-web/target/classes"/>
         <property name="context-root" value="ezcloud-web"/>
     </wb-module>

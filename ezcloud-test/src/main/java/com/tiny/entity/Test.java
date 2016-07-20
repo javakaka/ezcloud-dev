@@ -5,6 +5,9 @@ import java.text.DecimalFormat;
 
 import javax.swing.filechooser.FileSystemView;
 
+import com.ezcloud.framework.util.StringUtil;
+import com.ezcloud.framework.vo.DataSet;
+
 public class Test {
 
 	public static String FormetFileSize(long fileS) {
@@ -25,20 +28,56 @@ public class Test {
 	 /**
      * 获取硬盘的每个盘符
      */
-    public static void driver(){
+    @SuppressWarnings("unchecked")
+	public static DataSet getAllDrivers(){
+    	DataSet ds =new DataSet();
         // 当前文件系统类
         FileSystemView fsv = FileSystemView.getFileSystemView();
         // 列出所有windows 磁盘
         File[] fs = File.listRoots();
         // 显示磁盘卷标
         for (int i = 0; i < fs.length; i++) {
-            System.out.println(fsv.getSystemDisplayName(fs[i]));
+            String filePath =fsv.getSystemDisplayName(fs[i]);
+            System.out.println( filePath );
+//            listFolder( filePath );
             System.out.print("总大小" + FormetFileSize(fs[i].getTotalSpace()));
             System.out.println("剩余" + FormetFileSize(fs[i].getFreeSpace()));
+            ds.add(filePath);
         }
+        return ds;
+    }
+    
+    /**
+     * 读取某个目录下的全部非隐藏目录
+     * @param path
+     */
+    @SuppressWarnings("unchecked")
+	public static DataSet listFolder( String path ){
+    	DataSet ds=new DataSet();
+    	if (StringUtil.isEmptyOrNull(path)) {
+			ds =getAllDrivers();
+			return ds;
+		}
+    	File file =new File( path );
+    	if (file.isDirectory()) {
+			File chdFiles[] =file.listFiles();
+			File tmpFile  =null;
+			for (int i = 0; chdFiles!=null && i <  chdFiles.length; i++) {
+				tmpFile =chdFiles[i];
+				if ( tmpFile.isDirectory() && ! tmpFile.isHidden()) {
+					String tmpFilePath =tmpFile.getPath();
+					System.out.println("-------folder:"+ tmpFilePath );
+					ds.add(tmpFilePath);
+//					listFile( tmpFilePath );
+				}
+			}
+		}
+    	return ds;
     }
     
 	public static void main(String[] args) {
-		driver();
+//		getAllDrivers();
+		listFolder(null);
+		listFolder("/");
 	}
 }

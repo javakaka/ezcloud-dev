@@ -4,3 +4,4 @@
 *.classpath
 ezcloud-web/.classpath
 ezcloud-cxhl/.classpath
+ezcloud-test/.project

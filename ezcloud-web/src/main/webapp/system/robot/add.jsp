@@ -17,6 +17,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>/res/js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/input.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/datePicker/WdatePicker.js"></script>
+<link href="<%=basePath%>/res/css/diymen/tipswindown.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<%=basePath%>/res/css/diymen/tipswindown.js?version=1.4"></script>
+<link href="<%=basePath%>/res/css/diymen/tipswindown.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 $().ready(function() {
 	var $inputForm = $("#inputForm");
@@ -322,8 +325,36 @@ var AttributeTypeSelectOptionHtml =" "
 	*/
 	function chooseSystemFolder(id){
 		console.log('...........');
-		
+		title ="选择路径";
+		var path =$("#"+id).val();
+		console.log('...........'+path);
+		url="iframe:<%=basePath%>system/file/select-folder.jsp?path="+path;
+		iframeName="selectWindowIframeId";
+		popWindow(title,url,width,height,drag,time,showBg,cssName,iframeName);
 	}
+	
+	
+	
+	/** 弹窗******************************************/
+	var title;
+	var url;
+	var width=520;
+	var height=400;
+	var drag="true";
+	var time="";
+	var showBg="true";
+	var cssName="leotheme";
+	var iframeName="selectIframeId";
+	function popWindow(title,url,width,height,drag,time,showBg,cssName,iframeName)
+	{
+		tipsWindown(title,url,width,height,drag,time,showBg,cssName,iframeName);
+	}
+
+	 function closeTipWindow()
+	 {
+		tipsWindown.close();
+	 }
+	/********************************************/
 </script>
 <style type="text/css">
 .pageContent{
