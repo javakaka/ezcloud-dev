@@ -402,6 +402,11 @@
 			<artifactId>ezcloud-robot</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.ezcloud.dev</groupId>
+			<artifactId>ezcloud-test</artifactId>
+			<version>1.0</version>
+		</dependency>
   </dependencies>
   	<build>  
     <!-- 设置war包名称 -->    
