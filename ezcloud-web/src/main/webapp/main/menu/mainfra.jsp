@@ -10,6 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="<%=basePath%>res/navtab/css/Toolbar.css" rel="stylesheet" type="text/css"/>
 <link href="<%=basePath%>res/navtab/css/WindowPanel.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="<%=basePath%>res/navtab/js/jquery.js"></script>
+<script type="text/javascript" src="<%=basePath%>res/js/jqeury.smartresize.plugin.js"></script>
 <script type="text/javascript" src="<%=basePath%>res/navtab/js/Fader.js"></script>
 <script type="text/javascript" src="<%=basePath%>res/navtab/js/TabPanel.js"></script>
 <script type="text/javascript" src="<%=basePath%>res/navtab/js/Math.uuid.js"></script>

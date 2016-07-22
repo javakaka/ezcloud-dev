@@ -12,7 +12,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title><cc:message key="framework.nav.grant.role" /></title>
 <link href="<%=basePath%>/res/admin/css/common_pop.css" rel="stylesheet" type="text/css" />
-	<link type="text/css" rel="stylesheet" href="<%=basePath%>/res/css/xtree2.css" />
+<link type="text/css" rel="stylesheet" href="<%=basePath%>/res/css/xtree2.css" />
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/list.js"></script>

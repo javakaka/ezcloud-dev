@@ -18,6 +18,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileSystemView;
@@ -25,6 +27,8 @@ import javax.swing.filechooser.FileSystemView;
 import com.ezcloud.framework.vo.DataSet;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
+import net.sf.json.JSONObject;
  
  public class FileUtil
  {
@@ -629,12 +633,12 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
        return fileSizeString;
    }
 	
-	 /**
+	/**
     * 获取硬盘的每个盘符
     */
    @SuppressWarnings("unchecked")
 	public static DataSet getAllDrivers(){
-   	DataSet ds =new DataSet();
+   		DataSet ds =new DataSet();
        // 当前文件系统类
        FileSystemView fsv = FileSystemView.getFileSystemView();
        // 列出所有windows 磁盘
@@ -643,6 +647,9 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
        for (int i = 0; i < fs.length; i++) {
            String filePath =fsv.getSystemDisplayName(fs[i]);
            System.out.println( filePath );
+           filePath =fs[i].getPath().replaceAll( "\\\\", "/" );
+           System.out.println( filePath );
+           System.out.println( fsv.getSystemTypeDescription( fs[i] ) );
 //           listFolder( filePath );
            System.out.print("总大小" + FormetFileSize(fs[i].getTotalSpace()));
            System.out.println("剩余" + FormetFileSize(fs[i].getFreeSpace()));
@@ -659,24 +666,119 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
 	public static DataSet listFolder( String path ){
    	DataSet ds=new DataSet();
    	if (StringUtil.isEmptyOrNull(path)) {
-			ds =getAllDrivers();
-			return ds;
-		}
+		ds =getAllDrivers();
+		return ds;
+	}
    	File file =new File( path );
-   	if (file.isDirectory()) {
-			File chdFiles[] =file.listFiles();
-			File tmpFile  =null;
-			for (int i = 0; chdFiles!=null && i <  chdFiles.length; i++) {
-				tmpFile =chdFiles[i];
-				if ( tmpFile.isDirectory() && ! tmpFile.isHidden()) {
-					String tmpFilePath =tmpFile.getPath();
-					ds.add(tmpFilePath);
-				}
+   	if (file.isDirectory()) 
+   	{
+		File chdFiles[] =file.listFiles();
+		File tmpFile  =null;
+		for (int i = 0; chdFiles!=null && i <  chdFiles.length; i++) {
+			tmpFile =chdFiles[i];
+			if ( tmpFile.isDirectory() ) {
+				String tmpFilePath =tmpFile.getPath()+"/";
+				tmpFilePath =tmpFilePath.replaceAll( "\\\\", "/" );
+				ds.add(tmpFilePath);
 			}
 		}
+	}
    	return ds;
    }
    
+   /**
+    * 读取指定目录下以及上级目录的全部文件夹
+    * @param path
+    */
+   @SuppressWarnings({ "unchecked", "rawtypes" })
+   public static HashMap<String ,Object> queryAllPreFolders( String path ) {
+	   HashMap<String ,Object> map =new HashMap<String ,Object>();
+	   ArrayList list =new ArrayList();
+	   // 如果没有指定目录，就返回系统的根目录
+	   if (StringUtil.isEmptyOrNull(path)) {
+		   DataSet ds =getAllDrivers();
+		   map.put( "dir_name", "" );
+		   map.put( "is_selected", "1" );
+		   for ( int i = 0; i < ds.size(); i++ ) 
+		   {
+			String dirName =(String)ds.get( i );
+			HashMap<String ,Object> tmpMap =new HashMap<String ,Object>();
+			tmpMap.put( "dir_name", dirName );
+			tmpMap.put( "is_selected", "0" );
+			tmpMap.put( "children", new ArrayList() );
+			list.add( tmpMap );
+		   }
+		   map.put( "children", list );
+		}
+	   // 当指定了目录，就查询包含指定目录以及它的全部上级目录的全部子目录
+	   else
+	   {
+		   path +="/";
+		   path =path.replaceAll( "\\\\", "/" );
+		   String[] pathArray = path.split( "/" );
+		   String currentDir ="";
+		   HashMap<String ,Object> tmpMap =new HashMap<String ,Object>();
+		   currentDir +=pathArray[0]+"/";
+		   System.out.println( "listedPath---------------" +currentDir );
+		   tmpMap.put( "dir_name", currentDir );
+		   tmpMap.put( "is_selected", "0" );
+		   tmpMap.put( "children", querySelectedChildFolders(path,currentDir) );
+//		   map =tmpMap;
+		   
+		   DataSet ds =getAllDrivers();
+		   map.put( "dir_name", "" );
+		   map.put( "is_selected", "1" );
+		   for ( int i = 0; i < ds.size(); i++ ) 
+		   {
+			String dirName =(String)ds.get( i );
+			if ( dirName.equalsIgnoreCase( currentDir ) ) {
+				list.add( tmpMap );
+			}
+			else
+			{
+				HashMap<String ,Object> rootMap =new HashMap<String ,Object>();
+				rootMap.put( "dir_name", dirName );
+				rootMap.put( "is_selected", "0" );
+				rootMap.put( "children", new ArrayList() );
+				list.add( rootMap );
+			}
+		   }
+		   map.put( "children", list );
+	   }
+	   return map;
+   }
+   
+   @SuppressWarnings({ "unchecked", "rawtypes" })
+public static ArrayList querySelectedChildFolders( String path,String currentDir ){
+	   ArrayList list =new ArrayList();
+	   DataSet folderList =listFolder( currentDir );
+	   for ( int j = 0; j < folderList.size(); j++ ) 
+	   {
+		   String childPath =folderList.get( j ).toString();
+		   HashMap<String ,Object> tmpChildMap =new HashMap<String ,Object>();
+		   tmpChildMap.put( "dir_name", childPath );
+		   tmpChildMap.put( "is_selected", "0" );
+		   if ( path.indexOf( childPath ) != -1) 
+		   {
+			   tmpChildMap.put( "children", querySelectedChildFolders(path,childPath) );
+		   }
+		   else
+		   {
+			   tmpChildMap.put( "children", new ArrayList() );
+		   }
+		   list.add( tmpChildMap );
+	   }
+	   return list;
+   }
+   
+   public static void main(String[] args) {
+//	   HashMap<String ,Object> map =queryAllPreFolders("D:/programs/adobe/");
+//	   System.out.println( "---------------" +map );
+//	   JSONObject json =JSONObject.fromObject( map );
+//	   System.out.println( "---------------" +json.toString() );
+//	   System.out.println( "---------------" +listFolder( "D:/" ) );
+	   System.out.println( "---------------" +listFolder( "D:/programs/360/" ) );
+}
    
  }
 
