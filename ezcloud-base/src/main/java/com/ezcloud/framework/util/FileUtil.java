@@ -777,7 +777,8 @@ public static ArrayList querySelectedChildFolders( String path,String currentDir
 //	   JSONObject json =JSONObject.fromObject( map );
 //	   System.out.println( "---------------" +json.toString() );
 //	   System.out.println( "---------------" +listFolder( "D:/" ) );
-	   System.out.println( "---------------" +listFolder( "D:/programs/360/" ) );
+//	   System.out.println( "---------------" +listFolder( "D:/programs/360/" ) );
+	   System.out.println( "---------------" +mkdir("/Users/TongJianbo/work/88") );
 }
    
  }

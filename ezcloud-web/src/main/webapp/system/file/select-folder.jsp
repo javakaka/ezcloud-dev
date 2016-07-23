@@ -64,7 +64,6 @@ function queryFoldersByPath( parent_path ,obj){
 				var folderList =ovo.oForm.FOLDER_DATA;
 				var itemHtml ="";
 				$.each(folderList, function (i,item){
-					//itemHtml +="<div class=\"table-item\" onclick=\"tableClick('"+item.TABLE_NAME+"', this)\">"+item.TABLE_NAME+"</div>";
 					var dir_name =item;
 					var dir_display_name ="";
 					if(dir_name == "" )
@@ -94,12 +93,10 @@ function queryFoldersByPath( parent_path ,obj){
 						expand_icon ="images/Lplus.png";
 					}
 					itemHtml +=" <div class=\"webfx-tree-row \" style=\"padding-left: "+ paddingLeft +"px\" attrVal=\""+dir_name+"\" attrLevel=\""+ dynNodeLevel +"\"> ";
-					//html +=" <img class=\"webfx-tree-expand-icon\" src=\"images/Lplus.png\"/> ";
 					itemHtml +=" <img class=\"webfx-tree-expand-icon\" src=\"" + expand_icon + "\"  onclick=\"\expandHandler(this)\"/> ";
 					itemHtml +=" <img class=\"webfx-tree-icon\" src=\"images/openfolder.png\" /> ";
 					itemHtml +=" <a href=\"javascript:void(0)\" onclick=\"action('"+dir_name+"',this)\" class=\"webfx-tree-item-label\" >"+ dir_display_name +"</a> ";
 					itemHtml +=" </div>";
-					//html +=builderNodeChildrenHtml( folderData.children );
 					itemHtml +="<div class=\"webfx-tree-children\" style=\"display: block; background-position: -100px 0px;\"  id=\"wfxt-"+TreeItemID+"-children\" >";
 					itemHtml +="</div>";
 					itemHtml +="</div>";
@@ -180,6 +177,10 @@ function buildTreeItemHtml( folderData )
 	if(dir_name == "" )
 	{
 		dir_display_name ="我的电脑";
+	}
+	else if(dir_name == "/" )
+	{
+		dir_display_name ="/";
 	}
 	else
 	{
@@ -295,8 +296,130 @@ function action(dir,obj){
 function createNewFolder()
 {
 	// 找到当前被选中的节点
-	$("div .webfx-tree-row .sle")
+	var selectedRow =$("div .webfx-tree-row.selected");
+	// show children 
+	$(selectedRow).find(".webfx-tree-expand-icon").attr("src","images/Tminus.png");
+	var treeItem =$(selectedRow).parent();
+	var itemId =treeItem.attr("id");
+	var childrenId =itemId +"-children";
+	var childrenNode =document.getElementById(childrenId);
+	childrenNode.style.display="block";
+	// 构建一个新的节点
+	var itemHtml ="";
+	itemHtml +="<div class=\"webfx-tree-item\" id=\"wfxt-"+TreeItemID+"\" >";
+	
+	// 计算padding 
+	var itemLevel =$(selectedRow).attr("attrLevel");
+	var dynNodeLevel =parseInt(itemLevel)+1;
+	var paddingLeft =dynNodeLevel*19;
+	//console.log("paddingLeft---------->>" +paddingLeft);
+	var expand_icon ="images/Lplus.png";
+	itemHtml +=" <div class=\"webfx-tree-row \" style=\"padding-left: "+ paddingLeft +"px\" > ";
+	itemHtml +=" <img class=\"webfx-tree-expand-icon\" src=\"" + expand_icon + "\"  /> ";
+	itemHtml +=" <img class=\"webfx-tree-icon\" src=\"images/openfolder.png\" /> ";
+	itemHtml +=" <input type=\"text\" class=\"webfx-tree-item-label\" value=\"新建文件夹\" id=\"new-folder-name\"></input> ";
+	itemHtml +=" <input type=\"button\" class=\"webfx-tree-item-label\" value=\"确认\" onclick=\"saveNewFolder(this)\"></input> ";
+	itemHtml +=" <input type=\"button\" class=\"webfx-tree-item-label\" value=\"取消\" onclick=\"cancelCreateNewFolder(this)\"></input> ";
+	itemHtml +=" </div>";
+	itemHtml +="<div class=\"webfx-tree-children\" style=\"display: block; background-position: -100px 0px;\"  id=\"wfxt-"+TreeItemID+"-children\" >";
+	itemHtml +="</div>";
+	itemHtml +="</div>";
+	TreeItemID++;
+	$(childrenNode).append(itemHtml);
+	document.getElementById("new-folder-name").focus();
+	//$(selectedRow).parent().
 }
+
+function saveNewFolder( obj )
+{
+	var folderName =document.getElementById("new-folder-name").value;
+	if( typeof folderName == "undefined" || folderName == "")
+	{
+		$.message("error","请输入文件夹名称");
+		document.getElementById("new-folder-name").focus();
+	}
+	// find full path 
+	var treeItem =obj.parentNode.parentNode;
+	var selectedRow =$("div .webfx-tree-row.selected");
+	var parentPath =selectedRow.attr("attrval");
+	var parentLevel =selectedRow.attr("attrlevel");
+	var newFolderPath =parentPath+folderName+"/";
+	//alert( newFolderPath );
+	
+	var params ={path: newFolderPath};
+	var url="<%=basePath%>/system/file/create-folder.do";
+	$.ajax({
+		url: url,
+		type: "POST",
+		data: params,
+		dataType: "json",
+		cache: false,
+		beforeSend: function (XMLHttpRequest){
+		},
+		success: function(ovo, textStatus) {
+			var code =ovo.code;
+			if(code >=0)
+			{
+				cancelCreateNewFolder( obj );
+				// new node
+				var itemHtml ="";
+				var dir_name =newFolderPath;
+				var dir_display_name ="";
+				if(dir_name == "" )
+				{
+					dir_display_name ="我的电脑";
+				}
+				else
+				{
+					var fragments =dir_name.split("/");
+					dir_display_name =fragments[ fragments.length -2 ];
+				}
+				itemHtml +="<div class=\"webfx-tree-item\" id=\"wfxt-"+TreeItemID+"\" >";
+				
+				// 计算padding 
+				var dynNodeLevel =parseInt(parentLevel)+1;
+				var paddingLeft =dynNodeLevel*19;
+				//console.log("paddingLeft---------->>" +paddingLeft);
+				var expand_icon ="images/Lplus.png";
+				itemHtml +=" <div class=\"webfx-tree-row \" style=\"padding-left: "+ paddingLeft +"px\" attrVal=\""+dir_name+"\" attrLevel=\""+ dynNodeLevel +"\"> ";
+				itemHtml +=" <img class=\"webfx-tree-expand-icon\" src=\"" + expand_icon + "\"  onclick=\"\expandHandler(this)\"/> ";
+				itemHtml +=" <img class=\"webfx-tree-icon\" src=\"images/openfolder.png\" /> ";
+				itemHtml +=" <a href=\"javascript:void(0)\" onclick=\"action('"+dir_name+"',this)\" class=\"webfx-tree-item-label\" >"+ dir_display_name +"</a> ";
+				itemHtml +=" </div>";
+				itemHtml +="<div class=\"webfx-tree-children\" style=\"display: block; background-position: -100px 0px;\"  id=\"wfxt-"+TreeItemID+"-children\" >";
+				itemHtml +="</div>";
+				itemHtml +="</div>";
+				
+				var selectedRow =$("div .webfx-tree-row.selected");
+				// show children 
+				$(selectedRow).find(".webfx-tree-expand-icon").attr("src","images/Tminus.png");
+				var treeItem =$(selectedRow).parent();
+				var itemId =treeItem.attr("id");
+				var childrenId =itemId +"-children";
+				var childrenNode =document.getElementById(childrenId);
+				$(childrenNode).append(itemHtml);
+				TreeItemID++;
+			}
+			else
+			{
+				$.message("error",ovo.msg);
+			}
+		},
+		complete: function (XMLHttpRequest, textStatus){
+		},
+		error: function (){
+			$.message('error...');
+		}
+	});
+}
+
+function cancelCreateNewFolder( obj )
+{
+	
+	var treeItem =obj.parentNode.parentNode;
+	treeItem.parentNode.removeChild(treeItem);
+}
+
 
 </script>
 <style type="">
@@ -397,7 +520,7 @@ function createNewFolder()
 			<input type="text" readonly="readonly" class="selected-dir" value="" id="selectedDir"/>
 		</div>
 		<div id="newFolderDiv" class="dir-value">
-			<div id="newFolderBtn" class="new-folder-btn" onclick="">新建文件夹</div>
+			<div id="newFolderBtn" class="new-folder-btn" onclick="createNewFolder()">新建文件夹</div>
 		</div>
 	</div>
 	</form>

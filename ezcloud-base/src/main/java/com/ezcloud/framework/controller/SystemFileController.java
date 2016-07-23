@@ -1,5 +1,6 @@
 package com.ezcloud.framework.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +101,27 @@ public class SystemFileController extends BaseController {
 		HashMap<String ,Object> map =FileUtil.queryAllPreFolders(path);
 		ovo.oForm.put("folder_data", map);
 		System.out.println("------------------->>>");
+		return ovo;
+	}
+	
+	/**
+	 * 新建文件夹
+	 */
+	@RequestMapping( value = "/system/file/create-folder" )
+	public @ResponseBody
+	ResponseVO createFolder( String path ) {
+		ResponseVO ovo =new ResponseVO(0);
+		if ( StringUtil.isEmptyOrNull(path) ) {
+			ovo =new ResponseVO(-1,"请指定文件夹路径");
+			return ovo;
+		}
+		File file =new File(path);
+		if (file != null && file.exists() && file.isDirectory()) {
+			ovo =new ResponseVO(-1,"文件夹已经存在");
+			return ovo;
+		}
+		FileUtil.mkdir(path);
+		ovo =new ResponseVO(0,"操作成功");
 		return ovo;
 	}
 
