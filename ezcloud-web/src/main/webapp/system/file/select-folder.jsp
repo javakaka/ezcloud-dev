@@ -20,6 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link type="text/css" rel="stylesheet" href="<%=basePath%>/res/css/xtree2.css" />
 <script type="text/javascript">
 var Current_Path =request("path");
+var ParentDocumentTargetDomId =request("targetDomId");
 $().ready(function() {
 
 	//[@flash_message /]
@@ -28,7 +29,8 @@ $().ready(function() {
 	var path =request("path");
 	console.log("--------------------->>"  + path);
 	queryPreviewFoldersByPath( path );
-	
+	$("#targetDomId").val(ParentDocumentTargetDomId);
+	$("#selectedDir").val(Current_Path);
 });
 
 
@@ -200,7 +202,12 @@ function buildTreeItemHtml( folderData )
 	{
 		expand_icon ="images/Lplus.png";
 	}
-	html +=" <div class=\"webfx-tree-row \" style=\"padding-left: "+ paddingLeft +"px\" attrVal=\""+dir_name+"\" attrLevel=\""+ TreeItemLevel +"\"> ";
+	var isSelected ="";
+	if( Current_Path == dir_name )
+	{
+		isSelected ="selected";
+	}
+	html +=" <div class=\"webfx-tree-row "+ isSelected +"\" style=\"padding-left: "+ paddingLeft +"px\" attrVal=\""+dir_name+"\" attrLevel=\""+ TreeItemLevel +"\"> ";
 	//html +=" <img class=\"webfx-tree-expand-icon\" src=\"images/Lplus.png\"/> ";
 	html +=" <img class=\"webfx-tree-expand-icon\" src=\"" + expand_icon + "\"  onclick=\"\expandHandler(this)\"/> ";
 	html +=" <img class=\"webfx-tree-icon\" src=\"images/openfolder.png\" /> ";
@@ -460,6 +467,7 @@ function cancelCreateNewFolder( obj )
 </head>
 <body>
 	<form id="listForm" action="" method="get">
+		<input type="hidden" value="" id="targetDomId"/>
 	<div class="tree-wrapper">
 	<!-- 
 		<input type="button" value="收起/展开" onclick="tree.toggle()"/>
@@ -527,9 +535,9 @@ function cancelCreateNewFolder( obj )
 </body>
 <script type="text/javascript">
 function selectTarget(){
-	var selectedId=$('input[name="ids"]:checked').val();
-	var target=$('input[name="ids"]:checked').attr("title");
-	window.parent.setSelectedWindow(selectedId,target);
+	var path=$('#selectedDir').val();
+	var parentTargetDomId =$("#targetDomId").val( );
+	window.parent.setSelectedPath(path,parentTargetDomId);
 	window.parent.closeTipWindow();
 }
 

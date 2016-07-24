@@ -33,6 +33,23 @@ $().ready(function() {
 	
 });
 
+/**
+ * 弹出框 确认按钮事件
+ */
+function iframeSelectTarget()
+{
+	window.frames["selectSystemFolderIframeId"].selectTarget();
+	
+}
+
+/**
+ * 点击弹出框的确认按钮，将返回路径赋值到指定到节点
+ */
+function setSelectedPath(path,target)
+{
+	$("#"+target).val(path);
+}
+
 //获取指定数据库里面的表
 function queryTablesFromDataBase()
 {
@@ -162,6 +179,9 @@ function tableClick( tableName, obj){
 					entityHtml +="    	<select  id=\"setterScope"+item.COLUMN_NAME+"\" name=\"setterScope\">  ";
 					entityHtml +=ScopeSelectOptionHtml;
 					entityHtml +="    	</select>  ";
+					entityHtml +="    </div> ";
+					entityHtml +="    <div class=\"entity-td entity-w1\">    ";
+					entityHtml +="    	<input type=\"text\" id=\"attributeName"+item.COLUMN_NAME+"\" name=\"attributeRemark\" value=\"\" class=\"entity-field-name\"/> ";
 					entityHtml +="    </div> ";
 					entityHtml +="    </div> ";
 				});
@@ -329,7 +349,7 @@ var AttributeTypeSelectOptionHtml =" "
 		title ="选择路径";
 		var path =$("#"+id).val();
 		console.log('...........'+path);
-		var url="iframe:<%=basePath%>system/file/select-folder.jsp?path=" + path;
+		var url="iframe:<%=basePath%>system/file/select-folder.jsp?path=" + path+"&targetDomId="+id;
 		iframeName = "selectSystemFolderIframeId";
 		popWindow(title, url, width, height, drag, time, showBg, cssName, iframeName);
 	}
@@ -354,6 +374,9 @@ var AttributeTypeSelectOptionHtml =" "
 	/********************************************/
 </script>
 <style type="text/css">
+body {
+width: 1690px;
+}
 .pageContent {
 	width: 100%;
 	height: auto;
@@ -382,7 +405,7 @@ var AttributeTypeSelectOptionHtml =" "
 }
 
 .code {
-	min-width: 900px;
+	min-width: 1000px;
 	height: 800px;
 	margin-left: 5px;
 	overflow-y: scroll;
@@ -487,7 +510,7 @@ var AttributeTypeSelectOptionHtml =" "
 }
 
 .page-item {
-	width: 899px;
+	width: 999px;
 	border-bottom: 1px solid #352d2d;
 	border-right: 1px solid #2d2828;
 }
@@ -685,6 +708,7 @@ var AttributeTypeSelectOptionHtml =" "
 								<div class="entity-th entity-w1">可插入</div>
 								<div class="entity-th entity-w1">Getter域</div>
 								<div class="entity-th entity-w1">Setter域</div>
+								<div class="entity-th entity-w1">字段中文</div>
 							</div>
 							<div id="entityFields" class="entity-fields">
 								<div class="entity-item">
@@ -772,24 +796,252 @@ var AttributeTypeSelectOptionHtml =" "
 						</div>
 					</fieldset>
 				</div>
+				<div id="addPage" class="page-item">
+					<fieldset>
+						<legend>模块配置</legend>
+						<div class="config-item">
+							<label class="config-label">后台Cotroller 模块路径：</label> 
+							<input type="text" id="" name="" value="" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">API Cotroller 模块路径：</label> 
+							<input type="text" id="" name="" value="" class="config-value" />
+						</div>
+					</fieldset>
+				</div>
 				<div id="listPage" class="page-item">
 					<fieldset>
 						<legend>列表界面</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="list" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">展示的字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
+						<div class="config-item">
+							<label class="config-label">搜索的字段：</label> 
+							<input type="checkbox" id="list-page-search-field1" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field2" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field3" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field4" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field5" name="list-page-search-field" value="add" />字段
+						</div>
+						<div class="config-item">
+							<label class="config-label">操作按钮：</label> 
+							<input type="checkbox" id="list-page-add-btn" name="list-page-add-btn" value="add" />添加
+							<input type="checkbox" id="list-page-delete-btn" name="list-page-delete-btn" value="add" />删除
+							<input type="checkbox" id="list-page-refresh-btn" name="list-page-refresh-btn" value="add" />刷新
+							<input type="checkbox" id="list-page-preview-btn" name="list-page-preview-btn" value="add" />预览
+							<input type="checkbox" id="list-page-edit-btn" name="list-page-edit-btn" value="add" />编辑
+						</div>
 					</fieldset>
 				</div>
 				<div id="addPage" class="page-item">
 					<fieldset>
 						<legend>添加界面</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="add" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">展示的字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
 					</fieldset>
 				</div>
 				<div id="editPage" class="page-item">
 					<fieldset>
 						<legend>编辑界面</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="edit" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">展示的字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
+					</fieldset>
+				</div>
+				<div id="editPage" class="page-item">
+					<fieldset>
+						<legend>删除界面-ajax</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="delete" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="delete" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">条件字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
 					</fieldset>
 				</div>
 				<div id="apiPage" class="page-item">
 					<fieldset>
-						<legend>API 接口</legend>
+						<legend>API 列表接口</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="list" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="list" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">展示的字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
+						<div class="config-item">
+							<label class="config-label">搜索的字段：</label> 
+							<input type="checkbox" id="list-page-search-field1" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field2" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field3" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field4" name="list-page-search-field" value="add" />字段
+							<input type="checkbox" id="list-page-search-field5" name="list-page-search-field" value="add" />字段
+						</div>
+						<div class="config-item">
+							<label class="config-label">入参：</label> 
+						</div>
+						<div class="config-item">
+							<label class="config-label">入参：</label> 
+							<input type="text" id="list-page-show-field-1" name="list-page-show-field" value="add" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">是否分页：</label> 
+							<input type="radio" id="list-page-search-field5" name="list-page-search-field" value="add" />
+						</div>
+					</fieldset>
+				</div>
+				<div id="apiPage" class="page-item">
+					<fieldset>
+						<legend>API 添加接口</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="add" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="add" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">展示的字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
+					</fieldset>
+				</div>
+				<div id="apiPage" class="page-item">
+					<fieldset>
+						<legend>API 编辑接口</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="edit" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="edit" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">展示的字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
+					</fieldset>
+				</div>
+				<div id="apiPage" class="page-item">
+					<fieldset>
+						<legend>API 删除接口</legend>
+						<div class="config-item">
+							<label class="config-label">URI：</label> 
+							<input type="text" id="" name="" value="delete" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">Cotroller 方法名：</label> 
+							<input type="text" id="" name="" value="delete" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">方法备注：</label> 
+							<input type="text" id="" name="" value="备注" class="config-value" />
+						</div>
+						<div class="config-item">
+							<label class="config-label">条件字段：</label> 
+							<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
+							<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
+							<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
+							<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
+							<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+						</div>
 					</fieldset>
 				</div>
 			</div>
