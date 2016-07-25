@@ -8,6 +8,7 @@ import net.sf.json.JSONObject;
  * @author kaka
  */
 public class CodeEngineUtil {
+	private final static String entity_import ="import java.util.*;"+"\n import javax.persistence.*; \n import java.io.*;\n";
 
 	private CodeEngineUtil(){
 		
@@ -67,7 +68,18 @@ public class CodeEngineUtil {
 		//生成entity 文件
 		FileUtil.isDirExisted( entity_path ,true);
 		String entityFullPath =entity_path + entityName +".java";
-		FileUtil.writeText( entityFullPath, "entity" );
+		StringBuffer entitySB =new StringBuffer();
+		// 包名
+		String entityPackageName =entity_path.replace(project_path, "").replace("/", ".");
+		entityPackageName =entityPackageName.substring(0,entityPackageName.length() -1);
+		entitySB.append("package ").append(entityPackageName+"; \n");
+		entitySB.append(entity_import);
+		entitySB.append("@Entity").append("\n");
+		entitySB.append("@Table(name = \""+ tableName+"\")").append("\n");
+		entitySB.append("@SequenceGenerator(name = \"sequenceGenerator\", sequenceName = \""+sequenceName+"\")").append("\n");
+		entitySB.append("public class "+ entityName +" implements Serializable {").append("\n");
+		entitySB.append("}").append("\n");
+		FileUtil.writeText( entityFullPath, entitySB.toString() );
 		//生成dao 文件
 		FileUtil.isDirExisted( dao_path ,true);
 		String daoInterfaceFullPath =dao_path + entityName +"Dao.java";
