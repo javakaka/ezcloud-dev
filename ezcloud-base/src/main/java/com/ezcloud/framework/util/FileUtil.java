@@ -593,14 +593,14 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
      return true;
    }
  
-   public static boolean writeText(String paramString1, String paramString2)
+   public static boolean writeText(String fileName, String stringValue)
    {
-     return writeText(paramString1, paramString2, "GBK");
+     return writeText(fileName, stringValue, "GBK");
    }
  
-   public static boolean writeText(String paramString1, String paramString2, String paramString3)
+   public static boolean writeText(String fileName, String stringValue, String charset)
    {
-     return writeText(paramString1, paramString2, paramString3, false);
+     return writeText(fileName, stringValue, charset, false);
    }
  
    public static boolean writeText(String fileName, String stringValue, String charset, boolean paramBoolean)
@@ -749,7 +749,7 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
    }
    
    @SuppressWarnings({ "unchecked", "rawtypes" })
-public static ArrayList querySelectedChildFolders( String path,String currentDir ){
+   public static ArrayList querySelectedChildFolders( String path,String currentDir ){
 	   ArrayList list =new ArrayList();
 	   DataSet folderList =listFolder( currentDir );
 	   for ( int j = 0; j < folderList.size(); j++ ) 
@@ -771,6 +771,30 @@ public static ArrayList querySelectedChildFolders( String path,String currentDir
 	   return list;
    }
    
+   /**
+    * 检查指定的目录是否存在，且当autoCreateDir =true时，如果目录不存在，则自动创建目录
+    * @param path
+    * @param autoCreateDir
+    * @return
+    */
+   public static boolean isDirExisted( String path,boolean autoCreateDir){
+	   boolean bool =false;
+	   File file =new File( path );
+	   if ( file.exists() && file.isDirectory() ) {
+		bool =true;
+	   }
+	   else if ( !file.exists() || ! file.isDirectory()) {
+		   if( autoCreateDir ){
+			   file.mkdirs();
+			   bool =true;
+		   }
+		   else{
+			   bool =false;
+		   }
+	   }
+	   return bool;
+   }
+   
    public static void main(String[] args) {
 //	   HashMap<String ,Object> map =queryAllPreFolders("D:/programs/adobe/");
 //	   System.out.println( "---------------" +map );
@@ -778,7 +802,8 @@ public static ArrayList querySelectedChildFolders( String path,String currentDir
 //	   System.out.println( "---------------" +json.toString() );
 //	   System.out.println( "---------------" +listFolder( "D:/" ) );
 //	   System.out.println( "---------------" +listFolder( "D:/programs/360/" ) );
-	   System.out.println( "---------------" +mkdir("/Users/TongJianbo/work/88") );
+//	   System.out.println( "---------------" +mkdir("/Users/TongJianbo/work/88") );
+	   System.out.println( "---------------" +isDirExisted("d:/12345/666",true) );
 }
    
  }

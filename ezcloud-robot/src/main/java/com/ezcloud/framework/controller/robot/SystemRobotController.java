@@ -6,12 +6,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ezcloud.framework.controller.BaseController;
 import com.ezcloud.framework.service.robot.SystemRobotDatabaseService;
 import com.ezcloud.framework.service.robot.SystemRobotService;
+import com.ezcloud.framework.util.CodeEngineUtil;
+import com.ezcloud.framework.util.ResponseVO;
 import com.ezcloud.framework.vo.DataSet;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller("frameworkSystemRobotController")
 @RequestMapping("/system/robot")
@@ -40,5 +47,14 @@ public class SystemRobotController  extends BaseController{
 		robotService.getRow().put("LAN_STATE", LAN_STATE);
 		robotService.save();
 		return "redirect:Language.do";
+	}
+	
+	@RequestMapping(value = "/engine", method = RequestMethod.POST)
+	public @ResponseBody ResponseVO engine(String json, RedirectAttributes redirectAttributes) {
+		ResponseVO ovo =new ResponseVO(0);
+		System.out.println( "--------------------------->>" +json);
+		JSONObject paramJson =JSONObject.fromObject( json );
+		CodeEngineUtil.execute( paramJson );
+		return ovo;
 	}
 }
