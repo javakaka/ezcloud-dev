@@ -142,10 +142,10 @@ function Map() {
              value =this.elements[i].value
              console.log("-------------->>"+( typeof value ));
              if (typeof value == "object") {
-            	 var childJsonItem ={};
             	 var childJson =new Array();
             	 if( value instanceof Array){
             		 for(var j=0; j<value.length; j++){
+            			 var childJsonItem ={};
             			 var valueItem =value[j];
             			 if(valueItem instanceof Map ){
             				 for(m = 0; m < valueItem.elements.length; m++) {

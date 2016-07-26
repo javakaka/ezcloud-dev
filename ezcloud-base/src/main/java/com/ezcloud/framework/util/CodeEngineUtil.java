@@ -1,7 +1,12 @@
 package com.ezcloud.framework.util;
 
+import java.util.HashMap;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import com.ezcloud.framework.vo.DataSet;
+import com.ezcloud.framework.vo.Row;
 
 /**
  * 代码工具类
@@ -13,6 +18,7 @@ public class CodeEngineUtil {
 	private CodeEngineUtil(){
 		
 	}
+	
 	public static  ResponseVO execute(JSONObject paramJson)
 	{
 		ResponseVO ovo =null;
@@ -78,6 +84,9 @@ public class CodeEngineUtil {
 		entitySB.append("@Table(name = \""+ tableName+"\")").append("\n");
 		entitySB.append("@SequenceGenerator(name = \"sequenceGenerator\", sequenceName = \""+sequenceName+"\")").append("\n");
 		entitySB.append("public class "+ entityName +" implements Serializable {").append("\n");
+		// 字段
+		// {\"columnName\":\"state\",\"attributeName\":\"state\",\"attributeType\":\"Boolean\",\"mappingKind\":\"basic\",\"updateable\":\"1\",\"insertable\":\"1\",\"getterScope\":\"public\",\"setterScope\":\"public\",\"attributeRemark\":\"4\"}
+		entitySB.append( parseEntityAttributes( entityKeyGenerator, sequenceName,  attributeArray ) );
 		entitySB.append("}").append("\n");
 		FileUtil.writeText( entityFullPath, entitySB.toString() );
 		//生成dao 文件
@@ -91,5 +100,55 @@ public class CodeEngineUtil {
 		//生成api controller 文件
 		//生成jsp 文件
 		return ovo;
+	}
+	
+	/**
+	 * 根据jsonarray 解析出entity类的字段字符串
+	 * {\"columnName\":\"state\",\"attributeName\":\"state\",\"attributeType\":\"Boolean\",\"mappingKind\":\"basic\",\"updateable\":\"1\",\"insertable\":\"1\",\"getterScope\":\"public\",\"setterScope\":\"public\",\"attributeRemark\":\"4\"}
+	 * @return
+	 */
+	public static String parseEntityAttributes(String entityKeyGenerator,String sequenceName, JSONArray attributeArray )
+	{
+		StringBuilder content =new StringBuilder();
+		StringBuilder attributesContent =new StringBuilder();
+		StringBuilder methodsContent =new StringBuilder();
+		for (int i=0 ; i< attributeArray.size();i++) {
+			JSONObject json =attributeArray.getJSONObject(i);
+			// 申明属性
+			attributesContent.append("/** "+ json.getString("attributeRemark") +" */").append("\n");
+			attributesContent.append("private "+ json.getString("attributeType") +" "+json.getString("attributeName") +";").append("\n\n");
+			// 构建属性的方法
+			String mappingKind =json.getString("mappingKind");
+			if (mappingKind.equals("id")) {
+				methodsContent.append("@Id").append("\n");
+				methodsContent.append("@GeneratedValue(strategy = GenerationType."+entityKeyGenerator+")").append("\n");;
+			}
+			else if (mappingKind.equals("basic")) {
+				String updateable =json.getString("updateable");
+				String updateableValue ="";
+				if( updateable.equals("1") ){
+					updateableValue ="true";
+				}
+				else{
+					updateableValue ="false";
+				}
+				methodsContent.append("@Column(name = \""+json.getString("columnName")+"\",updatable = "+updateableValue+")").append("\n");
+			}
+			else if (mappingKind.equals("version")) {
+				methodsContent.append("@Version(name = \""+json.getString("columnName")+"\")").append("\n");
+			}
+			// getter
+			methodsContent.append(json.getString("getterScope")).append(" ").append(json.getString("attributeType")).append(" ");
+			String attrName =json.getString("attributeName");
+			String methodAttrName =attrName.substring(0,1).toUpperCase()+attrName.substring(1);
+			String getterMethodName ="get" + methodAttrName;
+			methodsContent.append(getterMethodName+"() {").append("\n").append("     ").append("return "+attrName+";").append("\n}\n\n");
+			// setter
+			String setterMethodName ="set" + methodAttrName;
+			methodsContent.append(json.getString("setterScope")).append(" ").append("void").append(" ");
+			methodsContent.append(setterMethodName+"( "+json.getString("attributeType")+" "+ json.getString("attributeName") +" ) {").append("\n").append("     ").append("this."+attrName+" ="+attrName+";").append("\n}\n\n");
+		}
+		content.append(attributesContent.toString()).append(methodsContent.toString());
+		return content.toString();
 	}
 }

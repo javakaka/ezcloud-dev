@@ -938,11 +938,11 @@ width: 1690px;
 							<label class="config-label">Entity 主键生成器：</label> 
 							<select id="entityKeyGenerator" name="entityKeyGenerator" class="config-value"
 								onchange="entityKeyGeneratorChange()">
-								<option value="auto">auto</option>
-								<option value="identity">identity</option>
-								<option value="sequence">sequence</option>
-								<option value="table">table</option>
-								<option value="none">none</option>
+								<option value="AUTO">auto</option>
+								<option value="IDENTITY">identity</option>
+								<option value="SEQUENCE">sequence</option>
+								<option value="TABLE">table</option>
+								<option value="NONE">none</option>
 							</select>
 						</div>
 						<div class="config-item">
