@@ -595,7 +595,7 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
  
    public static boolean writeText(String fileName, String stringValue)
    {
-     return writeText(fileName, stringValue, "GBK");
+     return writeText(fileName, stringValue, "UTF-8");
    }
  
    public static boolean writeText(String fileName, String stringValue, String charset)

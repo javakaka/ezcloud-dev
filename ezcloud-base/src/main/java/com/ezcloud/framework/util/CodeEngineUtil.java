@@ -1,12 +1,7 @@
 package com.ezcloud.framework.util;
 
-import java.util.HashMap;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import com.ezcloud.framework.vo.DataSet;
-import com.ezcloud.framework.vo.Row;
 
 /**
  * 代码工具类
@@ -14,7 +9,15 @@ import com.ezcloud.framework.vo.Row;
  */
 public class CodeEngineUtil {
 	private final static String entity_import ="import java.util.*;"+"\n import javax.persistence.*; \n import java.io.*;\n";
-
+	private final static String dao_import ="import com.ezcloud.framework.dao.JpaBaseDao;";
+	private final static String daoimpl_import ="import com.ezcloud.framework.dao.JpaBaseDaoImpl;\n import org.springframework.stereotype.*;\n import javax.persistence.*;";
+	private final static String base_dao ="JpaBaseDao";
+	private final static String base_dao_impl ="JpaBaseDaoImpl";
+	private final static String service_import ="import java.util.*;\n import com.ezcloud.framework.service.JpaBaseService;\n";
+	private final static String serviceimpl_import ="import com.ezcloud.framework.service.JpaBaseServiceImpl;\n import org.springframework.stereotype.*;import org.springframework.transaction.annotation.*;\n import javax.persistence.*;\n import javax.annotation.Resource;\n";
+	private final static String base_service ="JpaBaseService";
+	private final static String base_service_impl ="JpaBaseServiceImpl";
+	
 	private CodeEngineUtil(){
 		
 	}
@@ -88,14 +91,56 @@ public class CodeEngineUtil {
 		// {\"columnName\":\"state\",\"attributeName\":\"state\",\"attributeType\":\"Boolean\",\"mappingKind\":\"basic\",\"updateable\":\"1\",\"insertable\":\"1\",\"getterScope\":\"public\",\"setterScope\":\"public\",\"attributeRemark\":\"4\"}
 		entitySB.append( parseEntityAttributes( entityKeyGenerator, sequenceName,  attributeArray ) );
 		entitySB.append("}").append("\n");
-		FileUtil.writeText( entityFullPath, entitySB.toString() );
+		FileUtil.writeText( entityFullPath, entitySB.toString() ,"UTF-8");
 		//生成dao 文件
 		FileUtil.isDirExisted( dao_path ,true);
 		String daoInterfaceFullPath =dao_path + entityName +"Dao.java";
 		String daoImplFullPath =dao_path + entityName +"DaoImpl.java";
-		FileUtil.writeText( daoInterfaceFullPath, "dao" );
-		FileUtil.writeText( daoImplFullPath, "daoimpl" );
+		StringBuffer daoSB =new StringBuffer();
+		// 包名
+		String daoPackageName =dao_path.replace(project_path, "").replace("/", ".");
+		daoPackageName =daoPackageName.substring(0,daoPackageName.length() -1);
+		daoSB.append("package ").append(daoPackageName+"; \n");
+		daoSB.append(dao_import);
+		// current entity
+		daoSB.append("import ").append((entity_path + entityName).replace(project_path, "").replace("/", ".")+";\n");
+		daoSB.append(writeDaoCode( entityName, attributeArray ));
+		FileUtil.writeText( daoInterfaceFullPath, daoSB.toString() );
+		daoSB =new StringBuffer();
+		String daoImplPackageName =dao_path.replace(project_path, "").replace("/", ".");
+		daoImplPackageName =daoImplPackageName.substring(0,daoImplPackageName.length() -1);
+		daoSB.append("package ").append(daoImplPackageName+"; \n");
+		daoSB.append(daoimpl_import);
+		// current entity
+		daoSB.append("import ").append((entity_path + entityName).replace(project_path, "").replace("/", ".")+";\n");
+		daoSB.append( writeDaoImplCode(entityName, attributeArray) );
+		FileUtil.writeText( daoImplFullPath, daoSB.toString() );
 		//生成service 文件
+		String serviceInterfaceFullPath =service_path + entityName +"Service.java";
+		String serviceImplFullPath =service_path + entityName +"ServiceImpl.java";
+		StringBuffer serviceSB =new StringBuffer();
+		// 包名
+		String servicePackageName =service_path.replace(project_path, "").replace("/", ".");
+		servicePackageName =servicePackageName.substring(0,servicePackageName.length() -1);
+		serviceSB.append("package ").append(servicePackageName+"; \n");
+		// current entity
+		serviceSB.append("import ").append((entity_path + entityName).replace(project_path, "").replace("/", ".")+";\n");
+		serviceSB.append(service_import);
+		// code
+		serviceSB.append( writeServiceCode(entityName, attributeArray) );
+		FileUtil.writeText( serviceInterfaceFullPath, serviceSB.toString() );
+		serviceSB =new StringBuffer();
+		// impl 
+		String serviceImplPackageName =service_path.replace(project_path, "").replace("/", ".");
+		serviceImplPackageName =serviceImplPackageName.substring(0,serviceImplPackageName.length() -1);
+		serviceSB.append("package ").append(serviceImplPackageName+"; \n");
+		// current entity
+		serviceSB.append("import ").append((entity_path + entityName).replace(project_path, "").replace("/", ".")+";\n");
+		serviceSB.append("import ").append((dao_path + entityName+"Dao").replace(project_path, "").replace("/", ".")+";\n");
+		serviceSB.append(serviceimpl_import);
+		// code
+		serviceSB.append( writeServiceImplCode(entityName, attributeArray) );
+		FileUtil.writeText( serviceImplFullPath, serviceSB.toString() );
 		//生成admin controller 文件
 		//生成api controller 文件
 		//生成jsp 文件
@@ -149,6 +194,98 @@ public class CodeEngineUtil {
 			methodsContent.append(setterMethodName+"( "+json.getString("attributeType")+" "+ json.getString("attributeName") +" ) {").append("\n").append("     ").append("this."+attrName+" ="+attrName+";").append("\n}\n\n");
 		}
 		content.append(attributesContent.toString()).append(methodsContent.toString());
+		return content.toString();
+	}
+	
+	
+	/**
+	 * 生成Dao 类文件
+	 * @param attributeArray
+	 * @return
+	 */
+	public static String writeDaoCode(String entityName, JSONArray attributeArray ){
+		StringBuilder content =new StringBuilder();
+		String keyType ="Long";
+		for (int i=0 ; i< attributeArray.size();i++) 
+		{
+			JSONObject json =attributeArray.getJSONObject(i);
+			String mappingKind =json.getString("mappingKind");
+			if (mappingKind.equals("id")) {
+				keyType =json.getString("attributeType");
+				break;
+			}
+		}
+		content.append("public interface ").append(entityName+"Dao").append(" extends ").append(base_dao).append("<"+entityName+", "+keyType+">");
+		content.append("{\n}\n");
+		return content.toString();
+	}
+	
+	/**
+	 * 生成DaoImpl 类文件
+	 * @param attributeArray
+	 * @return
+	 */
+	public static String writeDaoImplCode(String entityName, JSONArray attributeArray ){
+		StringBuilder content =new StringBuilder();
+		String keyType ="Long";
+		for (int i=0 ; i< attributeArray.size();i++) 
+		{
+			JSONObject json =attributeArray.getJSONObject(i);
+			String mappingKind =json.getString("mappingKind");
+			if (mappingKind.equals("id")) {
+				keyType =json.getString("attributeType");
+				break;
+			}
+		}
+//		@Service("xxxx")
+		content.append("@Repository(\""+entityName+"JpaDao\") ").append("\n");
+		content.append("public class ").append(entityName+"DaoImpl").append(" extends ").append(base_dao_impl).append("<"+entityName+", "+keyType+">");
+		content.append(" implements ").append(entityName+"Dao").append("{\n}\n");
+		return content.toString();
+	}
+	
+	public static String writeServiceCode(String entityName, JSONArray attributeArray ){
+		StringBuilder content =new StringBuilder();
+		String keyType ="Long";
+		for (int i=0 ; i< attributeArray.size();i++) 
+		{
+			JSONObject json =attributeArray.getJSONObject(i);
+			String mappingKind =json.getString("mappingKind");
+			if (mappingKind.equals("id")) {
+				keyType =json.getString("attributeType");
+				break;
+			}
+		}
+		content.append("public interface ").append(entityName+"Service").append(" extends ").append(base_service).append("<"+entityName+", "+keyType+">");
+		content.append("{\n}\n");
+		return content.toString();
+	}
+	
+	public static String writeServiceImplCode(String entityName, JSONArray attributeArray ){
+		StringBuilder content =new StringBuilder();
+		String keyType ="Long";
+		for (int i=0 ; i< attributeArray.size();i++) 
+		{
+			JSONObject json =attributeArray.getJSONObject(i);
+			String mappingKind =json.getString("mappingKind");
+			if (mappingKind.equals("id")) {
+				keyType =json.getString("attributeType");
+				break;
+			}
+		}
+//		@Service("xxxx")
+		content.append("@Repository(\""+entityName+"JpaService\") ").append("\n");
+		content.append("public class ").append(entityName+"ServiceImpl").append(" extends ").append(base_service_impl).append("<"+entityName+", "+keyType+">");
+		content.append(" implements ").append(entityName+"Service").append("{\n");
+		
+		content.append(" @Resource(name = \""+entityName+"JpaDao\") \n");
+		String attrName =entityName.substring(0,1).toLowerCase()+entityName.substring(1);
+		content.append(" private "+entityName+"Dao "+attrName+"Dao; \n");
+		content.append(" @Resource(name = \""+entityName+"JpaDao\") \n");
+		content.append(" public void setBaseDao("+entityName+"Dao "+attrName+"Dao) { \n");
+		content.append(" super.setBaseDao("+attrName+"Dao); \n");
+		content.append(" } \n");
+		content.append(" } \n");
 		return content.toString();
 	}
 }

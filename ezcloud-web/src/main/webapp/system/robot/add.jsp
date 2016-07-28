@@ -1066,7 +1066,7 @@ width: 1690px;
 						<legend>列表界面</legend>
 						<div class="config-item">
 							<label class="config-label">URI：</label> 
-							<input type="text" id="list-page-uri" name="list-page-uri" value="" class="config-value" />
+							<input type="text" id="list-page-uri" name="list-page-uri" value="list" class="config-value" />
 						</div>
 						<div class="config-item">
 							<label class="config-label">Cotroller 方法名：</label> 
@@ -1111,7 +1111,7 @@ width: 1690px;
 						<legend>添加界面</legend>
 						<div class="config-item">
 							<label class="config-label">URI：</label> 
-							<input type="text" id="add-page-uri" name="add-page-uri" value="" class="config-value" />
+							<input type="text" id="add-page-uri" name="add-page-uri" value=add"" class="config-value" />
 						</div>
 						<div class="config-item">
 							<label class="config-label">Cotroller 方法名：</label> 
@@ -1135,7 +1135,7 @@ width: 1690px;
 						<legend>编辑界面</legend>
 						<div class="config-item">
 							<label class="config-label">URI：</label> 
-							<input type="text" id="edit-page-uri" name="edit-page-uri" value="" class="config-value" />
+							<input type="text" id="edit-page-uri" name="edit-page-uri" value="edit" class="config-value" />
 						</div>
 						<div class="config-item">
 							<label class="config-label">Cotroller 方法名：</label> 
