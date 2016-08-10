@@ -15,32 +15,43 @@ import com.ezcloud.framework.vo.OVO;
 
 /**
  * 接口Cotroller基类
- * @author Thinkive.TongJianbo
+ * @author TongJianbo
  *
  */
 public class ApiBaseController {
-	protected IVO ivo ;
-	protected OVO ovo;
+	protected ThreadLocal<IVO> ivo ;
+	protected ThreadLocal<OVO> ovo;
 	
 	public IVO getIvo() {
-		return ivo;
+		return ivo.get();
 	}
 
 	public void setIvo(IVO ivo) {
-		this.ivo = ivo;
+		this.ivo.set( ivo );
 	}
 
 	public OVO getOvo() {
-		return ovo;
+		return ovo.get();
 	}
 
 	public void setOvo(OVO ovo) {
-		this.ovo = ovo;
+		this.ovo.set( ovo );
 	}
 
 	public ApiBaseController() {
 		super();
-		ovo =new OVO();
+		ivo =new ThreadLocal<IVO>(){
+			@Override
+			protected IVO initialValue() {
+				return new IVO();
+			}
+		};
+		ovo =new ThreadLocal<OVO>(){
+			@Override
+			protected OVO initialValue() {
+				return new OVO(0,"","");
+			}
+		};
 	}
 
 	/**
@@ -70,10 +81,11 @@ public class ApiBaseController {
 	
 	public void parseRequest(HttpServletRequest request)
 	{
-		ivo =(IVO)request.getAttribute("ivo");
-		if(ivo == null )
+		IVO iivo =(IVO)request.getAttribute("ivo");
+		if(iivo == null )
 		{
-			ivo = new IVO();
+			iivo = new IVO();
 		}
+		setIvo( iivo );
 	}
 }

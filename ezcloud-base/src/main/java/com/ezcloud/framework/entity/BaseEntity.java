@@ -22,10 +22,10 @@ public abstract class BaseEntity implements Serializable {
 	public static final String ID_PROPERTY_NAME = "id";
 
 	/** "创建日期"属性名称 */
-	public static final String CREATE_DATE_PROPERTY_NAME = "createBy";
+	public static final String CREATE_DATE_PROPERTY_NAME = "createTime";
 
 	/** "修改日期"属性名称 */
-	public static final String MODIFY_DATE_PROPERTY_NAME = "updateBy";
+	public static final String MODIFY_DATE_PROPERTY_NAME = "updateTime";
 
 	/**
 	 * 保存验证组
@@ -45,10 +45,10 @@ public abstract class BaseEntity implements Serializable {
 	private Long id;
 
 	/** 创建日期 */
-	private Timestamp createBy;
+	private Timestamp createTime;
 
 	/** 修改日期 */
-	private Timestamp updateBy;
+	private Timestamp updateTime;
 
 	/**
 	 * 获取ID
@@ -79,8 +79,8 @@ public abstract class BaseEntity implements Serializable {
 	 * @return 创建日期
 	 */
 	@Column(nullable = false, updatable = false)
-	public Timestamp getCreateBy() {
-		return createBy;
+	public Timestamp getCreateTime() {
+		return createTime;
 	}
 
 	/**
@@ -89,8 +89,8 @@ public abstract class BaseEntity implements Serializable {
 	 * @param createDate
 	 *            创建日期
 	 */
-	public void setCreateBy(Timestamp createBy) {
-		this.createBy = createBy;
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
 
 	/**
@@ -99,8 +99,8 @@ public abstract class BaseEntity implements Serializable {
 	 * @return 修改日期
 	 */
 	@Column(nullable = false)
-	public Timestamp getUpdateBy() {
-		return updateBy;
+	public Timestamp getUpdateTime() {
+		return updateTime;
 	}
 
 	/**
@@ -109,8 +109,8 @@ public abstract class BaseEntity implements Serializable {
 	 * @param modifyDate
 	 *            修改日期
 	 */
-	public void setUpdateBy(Timestamp modifyBy) {
-		this.updateBy = modifyBy;
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	/**

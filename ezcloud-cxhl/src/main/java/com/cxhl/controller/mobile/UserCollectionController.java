@@ -45,14 +45,15 @@ public class UserCollectionController extends BaseController {
 	String queryPage(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id",null);
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet list =userCollectionService.list(user_id, page, page_size);
 		ovo =new OVO(0,"","");
 		ovo.set("list", list);
@@ -64,13 +65,14 @@ public class UserCollectionController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id","");
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String c_id =ivo.getString("shop_id","");
+		String c_id =getIvo().getString("shop_id","");
 		if(StringUtils.isEmptyOrNull(c_id))
 		{
 			ovo =new OVO(-1,"商家编号不能为空","商家编号不能为空");
@@ -110,8 +112,9 @@ public class UserCollectionController extends BaseController {
 	String find(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("查询收货地址详情");
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");
@@ -156,7 +159,8 @@ public class UserCollectionController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		OVO ovo =null;
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"收藏编号不能为空","收藏编号不能为空");

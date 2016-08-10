@@ -40,28 +40,28 @@ public class WeiXinAPPPayController extends ApiBaseController{
 	{
 		parseRequest(request);
 		logger.info("客户端发起微信支付请求，服务器端开始验证请求是否合法...");
-		String user_id =ivo.getString("user_id","");
-		String order_id =ivo.getString("order_id","");
-		String app_ip =ivo.getString("app_ip","");
-		String  service_name=ivo.getString("service_name","");
+		String user_id =getIvo().getString("user_id","");
+		String order_id =getIvo().getString("order_id","");
+		String app_ip =getIvo().getString("app_ip","");
+		String  service_name=getIvo().getString("service_name","");
 		if(StringUtils.isEmptyOrNull(service_name))
 		{
-			ovo =new OVO(-20010,"参数错误，请指定支付服务名称[service_name]","参数错误，请指定支付服务名称[service_name]");
+			OVO ovo =new OVO(-20010,"参数错误，请指定支付服务名称[service_name]","参数错误，请指定支付服务名称[service_name]");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
-			ovo =new OVO(-20010,"参数错误，用户编号[user_id]不能为空","参数错误，用户编号[user_id]不能为空");
+			OVO ovo =new OVO(-20010,"参数错误，用户编号[user_id]不能为空","参数错误，用户编号[user_id]不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		if(StringUtils.isEmptyOrNull(order_id))
 		{
-			ovo =new OVO(-20010,"参数错误，订单编号[order_id]不能为空","参数错误，订单编号[order_id]不能为空");
+			OVO ovo =new OVO(-20010,"参数错误，订单编号[order_id]不能为空","参数错误，订单编号[order_id]不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		if(StringUtils.isEmptyOrNull(app_ip))
 		{
-			ovo =new OVO(-20010,"参数错误，客户端IP[app_ip]不能为空","参数错误，客户端IP[app_ip]不能为空");
+			OVO ovo =new OVO(-20010,"参数错误，客户端IP[app_ip]不能为空","参数错误，客户端IP[app_ip]不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		Object serviceObj =null;
@@ -70,18 +70,18 @@ public class WeiXinAPPPayController extends ApiBaseController{
 			serviceObj =SpringUtils.getBean(service_name);
 		}catch(NoSuchBeanDefinitionException exp)
 		{
-			ovo =new OVO(-20010,"系统不存在[service_name]所对应的服务，请和管理员联系","系统不存在[service_name]所对应的服务，请和管理员联系");
+			OVO ovo =new OVO(-20010,"系统不存在[service_name]所对应的服务，请和管理员联系","系统不存在[service_name]所对应的服务，请和管理员联系");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		if(serviceObj == null)
 		{
-			ovo =new OVO(-20010,"系统不存在[service_name]所对应的服务，请和管理员联系","系统不存在[service_name]所对应的服务，请和管理员联系");
+			OVO ovo =new OVO(-20010,"系统不存在[service_name]所对应的服务，请和管理员联系","系统不存在[service_name]所对应的服务，请和管理员联系");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		Method method =serviceObj.getClass().getDeclaredMethod("validate",IVO.class);
-		ovo =(OVO)method.invoke(serviceObj,ivo);
+		OVO ovo =(OVO)method.invoke(serviceObj,getIvo());
 		System.out.println("ovo----------"+ovo);
-//		ovo =new OVO(0,"","");
+//		OVO ovo =new OVO(0,"","");
 //		ovo.set("list","1221");
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
 	}

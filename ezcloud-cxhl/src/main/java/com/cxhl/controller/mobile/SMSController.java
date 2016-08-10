@@ -46,10 +46,11 @@ public class SMSController extends BaseController {
 	String sendSms(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("发送短信");
-		String telephone =ivo.getString("telephone",null);
-		String type =ivo.getString("type","1");//1 发送短信 0不发送短信
-//		String version =ivo.getString("version","1");//1 房东租客版 2中介版
+		String telephone =getIvo().getString("telephone",null);
+		String type =getIvo().getString("type","1");//1 发送短信 0不发送短信
+//		String version =getIvo().getString("version","1");//1 房东租客版 2中介版
 		String sms_switch =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "SWITCH");
 		if(StringUtils.isEmptyOrNull(sms_switch))
 		{
@@ -172,8 +173,9 @@ public class SMSController extends BaseController {
 	{
 		parseRequest(request);
 		logger.info("发送短信");
-		String telephone =ivo.getString("telephone",null);
-		String type =ivo.getString("type","1");//1 发送短信 0不发送短信
+		OVO ovo =null;
+		String telephone =getIvo().getString("telephone",null);
+		String type =getIvo().getString("type","1");//1 发送短信 0不发送短信
 		String sms_switch =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "SWITCH");
 		if(StringUtils.isEmptyOrNull(sms_switch))
 		{
@@ -293,7 +295,8 @@ public class SMSController extends BaseController {
 	{
 		parseRequest(request);
 		logger.info("发送短信");
-		String user_id =ivo.getString("user_id",null);
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","");
@@ -305,8 +308,8 @@ public class SMSController extends BaseController {
 			ovo =new OVO(-1,"用户编号错误，用户不存在！","用户编号错误，用户不存在！");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String telephone =ivo.getString("telephone",null);
-		String type =ivo.getString("type","1");//1 发送短信 0不发送短信
+		String telephone =getIvo().getString("telephone",null);
+		String type =getIvo().getString("type","1");//1 发送短信 0不发送短信
 		String sms_switch =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "SWITCH");
 		if(StringUtils.isEmptyOrNull(telephone))
 		{

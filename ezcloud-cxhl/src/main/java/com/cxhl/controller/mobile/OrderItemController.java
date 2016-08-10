@@ -57,7 +57,8 @@ public class OrderItemController extends BaseController {
 	{
 		parseRequest(request);
 		logger.info("根据订单编号查询订单项列表");
-		String order_id =ivo.getString("id","");
+		String order_id =getIvo().getString("id","");
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(order_id))
 		{
 			ovo =new OVO(-10021,"订单ID不能为空","订单ID不能为空");
@@ -81,7 +82,8 @@ public class OrderItemController extends BaseController {
 	{
 		parseRequest(request);
 		logger.info("创建订单");
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
@@ -93,14 +95,14 @@ public class OrderItemController extends BaseController {
 			ovo =new OVO(-1,"用户不存在","用户不存在");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String money =ivo.getString("money","");
+		String money =getIvo().getString("money","");
 		if(StringUtils.isEmptyOrNull(money))
 		{
 			ovo =new OVO(-1,"订单总价格不能为空","订单总价格不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		//订单项目列表
-		DataSet item_list =(DataSet)ivo.get("items");
+		DataSet item_list =(DataSet)getIvo().get("items");
 		
 		
 		String error_msg =validateOrderItems(item_list);
@@ -161,7 +163,7 @@ public class OrderItemController extends BaseController {
 	String find(HttpServletRequest request) throws Exception
 	{
 		//
-		return AesUtil.encode(VOConvert.ovoToJson(ovo));
+		return AesUtil.encode(VOConvert.ovoToJson(new OVO()));
 	}
 	
 	
@@ -175,7 +177,8 @@ public class OrderItemController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"收藏编号不能为空","收藏编号不能为空");

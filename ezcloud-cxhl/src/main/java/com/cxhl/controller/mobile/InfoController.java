@@ -47,12 +47,12 @@ public class InfoController extends BaseController {
 	{
 		logger.info("分页查询资讯列表");
 		parseRequest(request);
-		String type_id =ivo.getString("type_id","");
-		String key_words =ivo.getString("key_words","");
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String type_id =getIvo().getString("type_id","");
+		String key_words =getIvo().getString("key_words","");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet list =infoService.list(type_id,key_words,page,page_size);
-		ovo =new OVO(0,"查询成功","查询成功");
+		OVO ovo =new OVO(0,"查询成功","查询成功");
 		ovo.set("list", list);
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
 	}
@@ -70,13 +70,13 @@ public class InfoController extends BaseController {
 	String remark(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
-			ovo =new OVO(-1,"编号不能为空","编号不能为空");
+			OVO ovo =new OVO(-1,"编号不能为空","编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String user_id =ivo.getString("user_id",null);
+		String user_id =getIvo().getString("user_id",null);
 		String remark =infoService.findRemark(id);
 		Setting setting =SettingUtils.get();
 		String siteUrl =setting.getSiteUrl();
@@ -90,7 +90,7 @@ public class InfoController extends BaseController {
 		remark =HtmlUtils.fillImgSrcWithDomain(domain, remark);
 		// 转义字符串中的换行，不然在转成json对象时会报错
 		remark =StringUtils.string2Json(remark);
-		ovo =new OVO(0,"操作成功","");
+		OVO ovo =new OVO(0,"操作成功","");
 		ovo.set("detail", remark);
 		String is_collected ="0";
 		if(! StringUtils.isEmptyOrNull(user_id))

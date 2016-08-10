@@ -44,14 +44,15 @@ public class UserAddressController extends BaseController {
 	String queryPage(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id",null);
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet list =userAddressService.list(user_id, page, page_size);
 		ovo =new OVO(0,"","");
 		ovo.set("list", list);
@@ -63,7 +64,8 @@ public class UserAddressController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id","");
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
@@ -75,44 +77,44 @@ public class UserAddressController extends BaseController {
 			ovo =new OVO(-1,"用户不存在","用户不存在");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String province_id =ivo.getString("province_id","");
+		String province_id =getIvo().getString("province_id","");
 		if(StringUtils.isEmptyOrNull(province_id))
 		{
 			ovo =new OVO(-1,"省份编号不能为空","省份编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String city_id =ivo.getString("city_id","");
+		String city_id =getIvo().getString("city_id","");
 		if(StringUtils.isEmptyOrNull(city_id))
 		{
 			ovo =new OVO(-1,"城市编号不能为空","城市编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String region_id =ivo.getString("region_id","");
-		String address =ivo.getString("address","");
+		String region_id =getIvo().getString("region_id","");
+		String address =getIvo().getString("address","");
 		if(StringUtils.isEmptyOrNull(address))
 		{
 			ovo =new OVO(-1,"详细地址不能为空","详细地址不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String receive_name =ivo.getString("receive_name","");
+		String receive_name =getIvo().getString("receive_name","");
 		if(StringUtils.isEmptyOrNull(receive_name))
 		{
 			ovo =new OVO(-1,"收货人姓名不能为空","收货人姓名不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String receive_tel =ivo.getString("receive_tel","");
+		String receive_tel =getIvo().getString("receive_tel","");
 		if(StringUtils.isEmptyOrNull(receive_tel))
 		{
 			ovo =new OVO(-1,"收货人电话不能为空","收货人电话不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String zip_code =ivo.getString("zip_code","");
+		String zip_code =getIvo().getString("zip_code","");
 		if(StringUtils.isEmptyOrNull(zip_code))
 		{
 			ovo =new OVO(-1,"邮编不能为空","邮编不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String is_default =ivo.getString("is_default","");
+		String is_default =getIvo().getString("is_default","");
 		if(StringUtils.isEmptyOrNull(is_default))
 		{
 			ovo =new OVO(-1,"是否是默认收货地址不能为空（1是默认0否）","是否是默认收货地址不能为空（1是默认0否）");
@@ -150,8 +152,9 @@ public class UserAddressController extends BaseController {
 	String find(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("查询收货地址详情");
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");
@@ -196,56 +199,57 @@ public class UserAddressController extends BaseController {
 	String update(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("修改收货地址详情");
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String province_id =ivo.getString("province_id","");
+		String province_id =getIvo().getString("province_id","");
 		if(StringUtils.isEmptyOrNull(province_id))
 		{
 			ovo =new OVO(-1,"省份编号不能为空","省份编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String city_id =ivo.getString("city_id","");
+		String city_id =getIvo().getString("city_id","");
 		if(StringUtils.isEmptyOrNull(city_id))
 		{
 			ovo =new OVO(-1,"城市编号不能为空","城市编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String region_id =ivo.getString("region_id","");
+		String region_id =getIvo().getString("region_id","");
 //		if(StringUtils.isEmptyOrNull(region_id))
 //		{
 //			ovo =new OVO(-1,"辖区编号不能为空","辖区编号不能为空");
 //			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 //		}
-		String address =ivo.getString("address","");
+		String address =getIvo().getString("address","");
 		if(StringUtils.isEmptyOrNull(address))
 		{
 			ovo =new OVO(-1,"详细地址不能为空","详细地址不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String receive_name =ivo.getString("receive_name","");
+		String receive_name =getIvo().getString("receive_name","");
 		if(StringUtils.isEmptyOrNull(receive_name))
 		{
 			ovo =new OVO(-1,"收货人姓名不能为空","收货人姓名不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String receive_tel =ivo.getString("receive_tel","");
+		String receive_tel =getIvo().getString("receive_tel","");
 		if(StringUtils.isEmptyOrNull(receive_tel))
 		{
 			ovo =new OVO(-1,"收货人电话不能为空","收货人电话不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String zip_code =ivo.getString("zip_code","");
+		String zip_code =getIvo().getString("zip_code","");
 		if(StringUtils.isEmptyOrNull(zip_code))
 		{
 			ovo =new OVO(-1,"邮编不能为空","邮编不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String is_default =ivo.getString("is_default","");
+		String is_default =getIvo().getString("is_default","");
 		if(StringUtils.isEmptyOrNull(is_default))
 		{
 			ovo =new OVO(-1,"是否是默认收货地址不能为空（1是默认0否）","是否是默认收货地址不能为空（1是默认0否）");
@@ -281,7 +285,8 @@ public class UserAddressController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		OVO ovo =null;
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");

@@ -47,11 +47,12 @@ public class ShopController extends BaseController {
 	String queryPage(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String type =ivo.getString("type","");
-		String key_word =ivo.getString("key_word","");
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","3");
+		String type =getIvo().getString("type","");
+		String key_word =getIvo().getString("key_word","");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","3");
 		DataSet list =shopService.list(type,key_word,page,page_size);
+		OVO ovo =getOvo();
 		ovo =new OVO(0,"","");
 		ovo.set("list", list);
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
@@ -62,13 +63,14 @@ public class ShopController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
+		OVO ovo =getOvo();
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String c_id =ivo.getString("shop_id","");
+		String c_id =getIvo().getString("shop_id","");
 		if(StringUtils.isEmptyOrNull(c_id))
 		{
 			ovo =new OVO(-1,"商家编号不能为空","商家编号不能为空");
@@ -108,7 +110,8 @@ public class ShopController extends BaseController {
 	String find(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		OVO ovo =new OVO();
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");
@@ -170,7 +173,8 @@ public class ShopController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"收藏编号不能为空","收藏编号不能为空");

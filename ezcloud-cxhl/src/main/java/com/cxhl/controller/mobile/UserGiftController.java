@@ -48,11 +48,12 @@ public class UserGiftController extends BaseController {
 	String queryPage(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("用户分页查询自己的礼品");
-		String user_id =ivo.getString("user_id","");
-		String state =ivo.getString("state","");
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String user_id =getIvo().getString("user_id","");
+		String state =getIvo().getString("state","");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet list =userGiftService.list(user_id,state,page,page_size);
 		ovo =new OVO(0,"","");
 		ovo.set("list", list);
@@ -70,7 +71,8 @@ public class UserGiftController extends BaseController {
 	{
 		//
 		parseRequest(request);
-		String id=ivo.getString("id","");
+		OVO ovo =null;
+		String id=getIvo().getString("id","");
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-10041,"礼品记录编号［id］不能为空","礼品记录编号［id］不能为空");
@@ -129,25 +131,26 @@ public class UserGiftController extends BaseController {
 	String exchange(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-//		String id =ivo.getString("id",null);
+		OVO ovo =null;
+//		String id =getIvo().getString("id",null);
 //		if(StringUtils.isEmptyOrNull(id))
 //		{
 //			ovo =new OVO(-1,"用户奖品记录编号不能为空","用户奖品记录编号不能为空");
 //			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 //		}
-		String user_id =ivo.getString("user_id",null);
+		String user_id =getIvo().getString("user_id",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String gift_id =ivo.getString("gift_id",null);
+		String gift_id =getIvo().getString("gift_id",null);
 		if(StringUtils.isEmptyOrNull(gift_id))
 		{
 			ovo =new OVO(-1,"奖品编号不能为空","奖品编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String exchange_num =ivo.getString("exchange_num",null);
+		String exchange_num =getIvo().getString("exchange_num",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"兑换数量不能为空","兑换数量不能为空");
@@ -200,13 +203,14 @@ public class UserGiftController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-//		String id =ivo.getString("id",null);
+//		String id =getIvo().getString("id",null);
 //		if(StringUtils.isEmptyOrNull(id))
 //		{
 //			ovo =new OVO(-1,"收藏编号不能为空","收藏编号不能为空");
 //			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 //		}
 ////		shopService.delete(id);
+		OVO ovo =null;
 		ovo =new OVO(0,"操作成功","");
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
 	}

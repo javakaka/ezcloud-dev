@@ -40,7 +40,7 @@ public class InfoTypeController extends BaseController {
 		logger.info("查询全部资讯分类");
 		parseRequest(request);
 		DataSet list =infoTypeService.list();
-		ovo =new OVO(0,"","");
+		OVO ovo =new OVO(0,"","");
 		ovo.set("list", list);
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
 	}

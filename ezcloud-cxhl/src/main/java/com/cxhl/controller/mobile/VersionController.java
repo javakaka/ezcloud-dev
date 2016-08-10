@@ -34,14 +34,15 @@ public class VersionController extends BaseController {
 	String queryVersion(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("查询最新版本");
-		String app =ivo.getString("app","1");
+		String app =getIvo().getString("app","1");
 //		if(StringUtils.isEmptyOrNull(app))
 //		{
 //			ovo =new OVO(-10001,"请指定app[1房租宝房东租客版2中介版]","请指定app[1房租宝房东租客版2中介版]");
 //			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 //		}
-		String device =ivo.getString("device",null);
+		String device =getIvo().getString("device",null);
 		if(StringUtils.isEmptyOrNull(device))
 		{
 			ovo =new OVO(-10001,"请指定设备类型[1 ios 2 android 3 wp]","请指定设备类型[1 ios 2 android 3 wp]");

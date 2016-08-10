@@ -69,7 +69,7 @@ public class ZoneController extends BaseController {
 //	{
 //		OVO ovo =null;
 //		parseRequest(request);
-//		String versionNo =ivo.getString("version");
+//		String versionNo =getIvo().getString("version");
 //		if(StringUtils.isEmptyOrNull(versionNo))
 //		{
 //			versionNo ="0";
@@ -124,7 +124,7 @@ public class ZoneController extends BaseController {
 	{
 		OVO ovo =null;
 		parseRequest(request);
-		String versionNo =ivo.getString("version");
+		String versionNo =getIvo().getString("version");
 		if(StringUtils.isEmptyOrNull(versionNo))
 		{
 			versionNo ="0";

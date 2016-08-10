@@ -46,14 +46,15 @@ public class UserInfoCollectionController extends BaseController {
 	{
 		logger.info("分页查询用户收藏的资讯");
 		parseRequest(request);
-		String user_id =ivo.getString("user_id",null);
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet list =userInfoCollectionService.list(user_id, page, page_size);
 		ovo =new OVO(0,"","");
 		ovo.set("list", list);
@@ -65,13 +66,14 @@ public class UserInfoCollectionController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id","");
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String info_id =ivo.getString("info_id","");
+		String info_id =getIvo().getString("info_id","");
 		if(StringUtils.isEmptyOrNull(info_id))
 		{
 			ovo =new OVO(-1,"资讯编号不能为空","资讯编号不能为空");
@@ -110,7 +112,8 @@ public class UserInfoCollectionController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		OVO ovo =null;
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");

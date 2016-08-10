@@ -47,27 +47,27 @@ public class UserEvaluationController extends BaseController {
 	{
 		parseRequest(request);
 		OVO ovo =null;
-		String id_card_no =ivo.getString("id_card_no","");
+		String id_card_no =getIvo().getString("id_card_no","");
 		if(StringUtils.isEmptyOrNull(id_card_no))
 		{
 			ovo =new OVO(-11000,"身份证号码不能为空","身份证号码不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String name =ivo.getString("name","");
+		String name =getIvo().getString("name","");
 		if(StringUtils.isEmptyOrNull(name))
 		{
 			ovo =new OVO(-11000,"姓名不能为空","姓名不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String type =ivo.getString("type","");
+		String type =getIvo().getString("type","");
 		if(StringUtils.isEmptyOrNull(type))
 		{
 			ovo =new OVO(-11000,"查询类型不能为空，1房东对租客的评价2租客对房东的评价","查询类型不能为空，1房东对租客的评价2租客对房东的评价");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		name =AesUtil.encode(name);
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet ds =userEvaluationService.list(Integer.parseInt(page),
 				Integer.parseInt(page_size),name,id_card_no,type);
 		ovo =new OVO(0,"","");
@@ -86,9 +86,10 @@ public class UserEvaluationController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("添加评价");
 		//评价者id,当前登录用户的编号
-		String user_id=ivo.getString("user_id",null);
+		String user_id=getIvo().getString("user_id",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"登录用户id不能为空","登录用户id不能为空");
@@ -101,7 +102,7 @@ public class UserEvaluationController extends BaseController {
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		//被评价者id
-		String to_id=ivo.getString("to_id",null);
+		String to_id=getIvo().getString("to_id",null);
 		if(StringUtils.isEmptyOrNull(to_id))
 		{
 			ovo =new OVO(-11000,"被评价者id不能为空","被评价者id不能为空");
@@ -114,14 +115,14 @@ public class UserEvaluationController extends BaseController {
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		//1房东评价租客;2租客评价房东;
-		String type=ivo.getString("type",null);
+		String type=getIvo().getString("type",null);
 		if(StringUtils.isEmptyOrNull(type))
 		{
 			ovo =new OVO(-11000,"评论类型不能为空，1房东对租客的评价2租客对房东的评价","评论类型不能为空，1房东对租客的评价2租客对房东的评价");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String room_id=ivo.getString("room_id","");
-		String content=ivo.getString("content","");
+		String room_id=getIvo().getString("room_id","");
+		String content=getIvo().getString("content","");
 		if(user_id.equals(to_id))
 		{
 			ovo =new OVO(-11000,"用户不能自己评论自己","用户不能自己评论自己");

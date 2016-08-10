@@ -84,7 +84,7 @@ public class LotteryController extends BaseController {
 	{
 		parseRequest(request);
 		OVO ovo =null;
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"用户编号不能为空","用户编号不能为空");
@@ -97,7 +97,7 @@ public class LotteryController extends BaseController {
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		logger.info("用户："+user_id+",开始进行优惠券抽奖."+DateUtil.getCurrentDateTime());
-//		String page_size =ivo.getString("page_size","10");
+//		String page_size =getIvo().getString("page_size","10");
 		Row glableRow =getLotteryGloableInfo();
 		if(glableRow == null)
 		{
@@ -371,7 +371,7 @@ public class LotteryController extends BaseController {
 	{
 		parseRequest(request);
 		OVO ovo =null;
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"用户编号不能为空","用户编号不能为空");
@@ -384,7 +384,7 @@ public class LotteryController extends BaseController {
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		logger.info("用户："+user_id+",开始进行二维码抽奖."+DateUtil.getCurrentDateTime());
-//		String page_size =ivo.getString("page_size","10");
+//		String page_size =getIvo().getString("page_size","10");
 		Row glableRow =getLotteryGloableInfo();
 		if(glableRow == null)
 		{
@@ -674,7 +674,7 @@ public class LotteryController extends BaseController {
 	{
 		parseRequest(request);
 		OVO ovo =null;
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"用户编号不能为空","用户编号不能为空");
@@ -687,7 +687,7 @@ public class LotteryController extends BaseController {
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		logger.info("用户："+user_id+",开始进行二维码抽奖."+DateUtil.getCurrentDateTime());
-//		String page_size =ivo.getString("page_size","10");
+//		String page_size =getIvo().getString("page_size","10");
 		Row glableRow =getLotteryGloableInfo();
 		if(glableRow == null)
 		{
@@ -1030,7 +1030,7 @@ public class LotteryController extends BaseController {
 	{
 		parseRequest(request);
 		OVO ovo =null;
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"用户编号不能为空","用户编号不能为空");
@@ -1072,7 +1072,7 @@ public class LotteryController extends BaseController {
 	{
 		parseRequest(request);
 		OVO ovo =null;
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"用户编号不能为空","用户编号不能为空");
@@ -1084,8 +1084,8 @@ public class LotteryController extends BaseController {
 			ovo =new OVO(-11000,"用户未登录，请先登录","用户未登录，请先登录");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet ds =lotteryRecordService.queryUserList(user_id, Integer.parseInt(page), Integer.parseInt(page_size));
 		ovo =new OVO(0,"操作成功","操作成功");
 		ovo.set("list", ds);

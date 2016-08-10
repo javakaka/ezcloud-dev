@@ -45,7 +45,7 @@ public class ShopTypeController extends BaseController {
 	{
 		parseRequest(request);
 		DataSet list =shopTypeService.list();
-		ovo =new OVO(0,"","");
+		OVO ovo =new OVO(0,"","");
 		ovo.set("list", list);
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
 	}
@@ -55,13 +55,14 @@ public class ShopTypeController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String c_id =ivo.getString("shop_id","");
+		String c_id =getIvo().getString("shop_id","");
 		if(StringUtils.isEmptyOrNull(c_id))
 		{
 			ovo =new OVO(-1,"商家编号不能为空","商家编号不能为空");
@@ -102,7 +103,8 @@ public class ShopTypeController extends BaseController {
 	{
 		parseRequest(request);
 		logger.info("查询收货地址详情");
-		String id =ivo.getString("id",null);
+		OVO ovo =null;
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");
@@ -147,7 +149,8 @@ public class ShopTypeController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"收藏编号不能为空","收藏编号不能为空");

@@ -56,19 +56,20 @@ public class UserController extends BaseController {
 	String  login(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String username =ivo.getString("username",null);
+		OVO ovo =null;
+		String username =getIvo().getString("username",null);
 		if(username == null || username.replace(" ","").length() ==0)
 		{
 			ovo =new OVO(-1001, "请求参数错误", "用户名不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String password =ivo.getString("password",null);
+		String password =getIvo().getString("password",null);
 		if(password == null || password.replace(" ","").length() ==0)
 		{
 			ovo =new OVO(-1001, "请求参数错误", "密码不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String version =ivo.getString("version",null);
+		String version =getIvo().getString("version",null);
 		if(version == null || version.replace(" ","").length() ==0)
 		{
 			ovo =new OVO(-1001, "请求参数错误", "版本号不能为空");
@@ -151,9 +152,10 @@ public class UserController extends BaseController {
 	String changePassword(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id",null);
-		String oldPwd =ivo.getString("oldPwd",null);
-		String newPwd =ivo.getString("newPwd",null);
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id",null);
+		String oldPwd =getIvo().getString("oldPwd",null);
+		String newPwd =getIvo().getString("newPwd",null);
 		
 		if(user_id == null || user_id.replace(" ", "").length() ==0){
 			ovo =new OVO(-10005,"用户编号不能为空","用户编号不能为空");
@@ -204,9 +206,10 @@ public class UserController extends BaseController {
 	String register(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		Row insertRow =new Row();
 		/**手机号码 必填 **/
-		String telephone =ivo.getString("telephone",null);
+		String telephone =getIvo().getString("telephone",null);
 		if(StringUtils.isEmptyOrNull(telephone))
 		{
 			ovo =new OVO(-10010,"手机号码不能为空","手机号码不能为空");
@@ -227,7 +230,7 @@ public class UserController extends BaseController {
 		String username ="";
 		insertRow.put("username", username);
 		/**密码 必填 **/
-		String password =ivo.getString("password",null);
+		String password =getIvo().getString("password",null);
 		if(StringUtils.isEmptyOrNull(password))
 		{
 			ovo =new OVO(-10010,"密码不能为空","密码不能为空");
@@ -236,7 +239,7 @@ public class UserController extends BaseController {
 		insertRow.put("password", password);
 		
 		/**短信验证码 必填**/
-		String sms_code =ivo.getString("sms_code",null);
+		String sms_code =getIvo().getString("sms_code",null);
 		if(StringUtils.isEmptyOrNull(sms_code))
 		{
 			ovo =new OVO(-10010,"短信验证码不能为空","短信验证码不能为空");
@@ -249,7 +252,7 @@ public class UserController extends BaseController {
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		/**邀请码 选填**/
-		String invite_code =ivo.getString("invite_code",null);
+		String invite_code =getIvo().getString("invite_code",null);
 		if(! StringUtils.isEmptyOrNull(invite_code))
 		{
 			//
@@ -265,7 +268,7 @@ public class UserController extends BaseController {
 		String register_time =DateUtil.getCurrentDateTime();
 		insertRow.put("register_time", register_time);
 		/**终端类型 必填 1 android 2 ios **/
-		String device =ivo.getString("device",null);
+		String device =getIvo().getString("device",null);
 		if(StringUtils.isEmptyOrNull(device))
 		{
 			ovo =new OVO(-10010,"设备类型不能为空","设备类型不能为空");
@@ -273,7 +276,7 @@ public class UserController extends BaseController {
 		}
 		insertRow.put("device", device);
 		/**机器码 必填 **/
-		String device_code =ivo.getString("device_code",null);
+		String device_code =getIvo().getString("device_code",null);
 		if(StringUtils.isEmptyOrNull(device_code))
 		{
 			ovo =new OVO(-10010,"机器码不能为空","机器码不能为空");
@@ -281,7 +284,7 @@ public class UserController extends BaseController {
 		}
 		insertRow.put("device_code", device_code);
 		/**客户端版本 必填 **/
-		String version =ivo.getString("version",null);
+		String version =getIvo().getString("version",null);
 		if(StringUtils.isEmptyOrNull(version))
 		{
 			ovo =new OVO(-10010,"客户端版本号不能为空","客户端版本号不能为空");
@@ -365,8 +368,9 @@ public class UserController extends BaseController {
 	String queryProfile(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		Row userRow =null;
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-10010,"用户编号不能为空","");
@@ -413,8 +417,9 @@ public class UserController extends BaseController {
 	String updateProfile(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		Row userRow =null;
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-10010,"用户编号不能为空","用户编号不能为空");
@@ -429,13 +434,13 @@ public class UserController extends BaseController {
 //		String old_id_card_no =userRow.getString("id_card_no",null);
 		userRow =new Row();
 		userRow.put("id", id);
-		String name =ivo.getString("name",null);
+		String name =getIvo().getString("name",null);
 		if(!StringUtils.isEmptyOrNull(name))
 		{
 			userRow.put("name", name);
 		}
 		//验证唯一性
-		String email =ivo.getString("email",null);
+		String email =getIvo().getString("email",null);
 		boolean email_existed=false;
 		if(!StringUtils.isEmptyOrNull(email))
 		{
@@ -448,7 +453,7 @@ public class UserController extends BaseController {
 			userRow.put("email", email);
 		}
 		//验证唯一性
-		String username =ivo.getString("username",null);
+		String username =getIvo().getString("username",null);
 		boolean username_existed=false;
 		if(!StringUtils.isEmptyOrNull(username))
 		{
@@ -460,13 +465,13 @@ public class UserController extends BaseController {
 			}
 			userRow.put("username", username);
 		}
-		String address =ivo.getString("address",null);
+		String address =getIvo().getString("address",null);
 		if(!StringUtils.isEmptyOrNull(address))
 		{
 			userRow.put("address", address);
 		}
 //		//身份证号码
-//		String id_card_no =ivo.getString("id_card_no",null);
+//		String id_card_no =getIvo().getString("id_card_no",null);
 //		if(!StringUtils.isEmptyOrNull(id_card_no))
 //		{
 //			//检验身份证号码是否合法
@@ -504,8 +509,9 @@ public class UserController extends BaseController {
 	String bindBankCard(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		Row userRow =null;
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-10010,"用户编号不能为空","用户编号不能为空");
@@ -517,13 +523,13 @@ public class UserController extends BaseController {
 			ovo =new OVO(-10010,"用户不存在","用户不存在");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String name =ivo.getString("user_name",null);
+		String name =getIvo().getString("user_name",null);
 		if(StringUtils.isEmptyOrNull(name))
 		{
 			ovo =new OVO(-10010,"用户姓名不能为空","用户姓名不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String card_no =ivo.getString("card_no",null);
+		String card_no =getIvo().getString("card_no",null);
 		String old_bank_card_no =userRow.getString("bank_card_no","");
 		if(StringUtils.isEmptyOrNull(card_no))
 		{
@@ -569,8 +575,9 @@ public class UserController extends BaseController {
 	String bindCreditCard(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		Row userRow =null;
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-10010,"用户编号不能为空","用户编号不能为空");
@@ -582,13 +589,13 @@ public class UserController extends BaseController {
 			ovo =new OVO(-10010,"用户不存在","用户不存在");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String name =ivo.getString("user_name",null);
+		String name =getIvo().getString("user_name",null);
 		if(StringUtils.isEmptyOrNull(name))
 		{
 			ovo =new OVO(-10010,"用户姓名不能为空","用户姓名不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String password =ivo.getString("password",null);
+		String password =getIvo().getString("password",null);
 		if(StringUtils.isEmptyOrNull(password))
 		{
 			ovo =new OVO(-10010,"密码不能为空","");
@@ -600,7 +607,7 @@ public class UserController extends BaseController {
 			ovo =new OVO(-10010,"密码错误","");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));			
 		}
-		String card_no =ivo.getString("card_no",null);
+		String card_no =getIvo().getString("card_no",null);
 		String old_credit_card_no =userRow.getString("credit_card_no","");
 		if(StringUtils.isEmptyOrNull(card_no))
 		{
@@ -646,13 +653,14 @@ public class UserController extends BaseController {
 	String resetPasswordBySms(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String telephone =ivo.getString("telephone",null);
+		OVO ovo =null;
+		String telephone =getIvo().getString("telephone",null);
 		if(StringUtils.isEmptyOrNull(telephone))
 		{
 			ovo =new OVO(-10010,"手机号码不能为空","手机号码不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String password =ivo.getString("password",null);
+		String password =getIvo().getString("password",null);
 		if(StringUtils.isEmptyOrNull(telephone))
 		{
 			ovo =new OVO(-10010,"密码不能为空","密码不能为空");
@@ -665,7 +673,7 @@ public class UserController extends BaseController {
 			ovo =new OVO(-10010,"用户不存在","非法用户");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String sms_code =ivo.getString("sms_code",null);
+		String sms_code =getIvo().getString("sms_code",null);
 		if(StringUtils.isEmptyOrNull(sms_code))
 		{
 			ovo =new OVO(-10010,"短信验证码不能为空","短信验证码不能为空");
@@ -706,20 +714,21 @@ public class UserController extends BaseController {
 	String changeTelephone(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		//用户ID
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String telephone =ivo.getString("telephone",null);
+		String telephone =getIvo().getString("telephone",null);
 		if(StringUtils.isEmptyOrNull(telephone))
 		{
 			ovo =new OVO(-1,"手机号码不能为空","手机号码不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String sms_code =ivo.getString("sms_code","");
+		String sms_code =getIvo().getString("sms_code","");
 		if(StringUtils.isEmptyOrNull(sms_code))
 		{
 			ovo =new OVO(-1,"短信验证码不能为空","短信验证码不能为空");
@@ -755,14 +764,15 @@ public class UserController extends BaseController {
 	String setPayPassword(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		//用户ID
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String pay_password =ivo.getString("pay_password",null);
+		String pay_password =getIvo().getString("pay_password",null);
 		if(StringUtils.isEmptyOrNull(pay_password))
 		{
 			ovo =new OVO(-1,"支付密码不能为空","支付密码不能为空");
@@ -792,8 +802,9 @@ public class UserController extends BaseController {
 	String logout(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		//用户ID
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
@@ -815,8 +826,9 @@ public class UserController extends BaseController {
 	String upload_avatar(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		//用户ID
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
@@ -826,7 +838,7 @@ public class UserController extends BaseController {
 		Setting setting =SettingUtils.get();
 		String file_path =setting.getPhysicalPath();
 		String avatar_uri ="";
-		String userPic2 =ivo.getString("picture_base64_str",null);
+		String userPic2 =getIvo().getString("picture_base64_str",null);
 		String userPic = new String(Base64Util.decode(userPic2));
 		String imgPath ="";
 		String imgName =id;

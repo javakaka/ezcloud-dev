@@ -47,14 +47,15 @@ public class UserShareController extends BaseController {
 	String queryPage(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id",null);
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id",null);
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet list =userShareService.list(user_id, page, page_size);
 		ovo =new OVO(0,"","");
 		ovo.set("list", list);
@@ -66,7 +67,8 @@ public class UserShareController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String user_id =ivo.getString("user_id","");
+		OVO ovo =null;
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
@@ -78,7 +80,7 @@ public class UserShareController extends BaseController {
 			ovo =new OVO(-1,"用户不存在","用户不存在");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String type =ivo.getString("type","");
+		String type =getIvo().getString("type","");
 		if(StringUtils.isEmptyOrNull(type))
 		{
 			ovo =new OVO(-1,"分享类型不能为空，1表示微博2表示微信","分享类型不能为空，1表示微博2表示微信");
@@ -117,8 +119,9 @@ public class UserShareController extends BaseController {
 	String update(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("修改收货地址详情");
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");
@@ -138,7 +141,8 @@ public class UserShareController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		OVO ovo =null;
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");

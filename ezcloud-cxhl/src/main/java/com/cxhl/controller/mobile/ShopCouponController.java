@@ -48,11 +48,11 @@ public class ShopCouponController extends BaseController {
 	{
 		logger.info("分页查询商家的优惠券列表");
 		parseRequest(request);
-		String shop_id =ivo.getString("shop_id","");
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","3");
+		String shop_id =getIvo().getString("shop_id","");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","3");
 		DataSet list =shopCouponService.list(shop_id,page,page_size);
-		ovo =new OVO(0,"查询成功","查询成功");
+		OVO ovo =new OVO(0,"查询成功","查询成功");
 		ovo.set("list", list);
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
 	}
@@ -69,7 +69,8 @@ public class ShopCouponController extends BaseController {
 	String find(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");
@@ -111,7 +112,8 @@ public class ShopCouponController extends BaseController {
 	String remark(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		String id =getIvo().getString("id",null);
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"编号不能为空","编号不能为空");

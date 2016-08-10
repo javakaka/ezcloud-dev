@@ -81,10 +81,10 @@ public class AdController extends BaseController {
 	{
 		parseRequest(request);
 		logger.info("广告详情");
-		String id=ivo.getString("id",null);
+		String id=getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
-			ovo =new OVO(-10011,"id不能为空","id不能为空");
+			OVO ovo =new OVO(-10011,"id不能为空","id不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		Row row =adService.findById(id);

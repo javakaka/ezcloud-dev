@@ -47,14 +47,14 @@ public class LetterController extends BaseController {
 	{
 		parseRequest(request);
 		OVO ovo =null;
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"用户编号不能为空","用户编号不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet ds =letterService.list(Integer.parseInt(page),
 				Integer.parseInt(page_size),user_id);
 		ovo =new OVO(0,"","");
@@ -90,7 +90,8 @@ public class LetterController extends BaseController {
 		parseRequest(request);
 		logger.info("发送/回复站内信");
 		//发送者id,当前登录用户的编号
-		String user_id=ivo.getString("user_id",null);
+		String user_id=getIvo().getString("user_id",null);
+		OVO ovo =null;
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-11000,"登录用户id不能为空","登录用户id不能为空");
@@ -103,7 +104,7 @@ public class LetterController extends BaseController {
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		//接收者id
-		String to_id=ivo.getString("to_id",null);
+		String to_id=getIvo().getString("to_id",null);
 		if(StringUtils.isEmptyOrNull(to_id))
 		{
 			ovo =new OVO(-11000,"接收者id不能为空","接收者id不能为空");
@@ -115,10 +116,10 @@ public class LetterController extends BaseController {
 			ovo =new OVO(-11000,"用户不存在","用户不存在");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String up_id=ivo.getString("up_id","");
+		String up_id=getIvo().getString("up_id","");
 		//标题
-		String title=ivo.getString("title","");
-		String content=ivo.getString("content","");
+		String title=getIvo().getString("title","");
+		String content=getIvo().getString("content","");
 		Row row =new Row();
 		row.put("from_id", user_id);
 		row.put("to_id", to_id);

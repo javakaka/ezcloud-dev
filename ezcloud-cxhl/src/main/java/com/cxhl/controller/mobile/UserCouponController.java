@@ -60,11 +60,12 @@ public class UserCouponController extends BaseController {
 	String queryPage(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("用户分页查询自己的优惠券，按创建时间倒序排列");
-		String user_id =ivo.getString("user_id","");
-		String state =ivo.getString("state","");
-		String page =ivo.getString("page","1");
-		String page_size =ivo.getString("page_size","10");
+		String user_id =getIvo().getString("user_id","");
+		String state =getIvo().getString("state","");
+		String page =getIvo().getString("page","1");
+		String page_size =getIvo().getString("page_size","10");
 		DataSet list =userCouponService.list(user_id,state,page,page_size);
 		ovo =new OVO(0,"","");
 		ovo.set("list", list);
@@ -82,8 +83,9 @@ public class UserCouponController extends BaseController {
 	String add(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
+		OVO ovo =null;
 		logger.info("创建订单");
-		String user_id =ivo.getString("user_id","");
+		String user_id =getIvo().getString("user_id","");
 		if(StringUtils.isEmptyOrNull(user_id))
 		{
 			ovo =new OVO(-1,"用户编号不能为空","用户编号不能为空");
@@ -95,14 +97,14 @@ public class UserCouponController extends BaseController {
 			ovo =new OVO(-1,"用户不存在","用户不存在");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
-		String money =ivo.getString("money","");
+		String money =getIvo().getString("money","");
 		if(StringUtils.isEmptyOrNull(money))
 		{
 			ovo =new OVO(-1,"订单总价格不能为空","订单总价格不能为空");
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		//订单项目列表
-		DataSet item_list =(DataSet)ivo.get("items");
+		DataSet item_list =(DataSet)getIvo().get("items");
 		
 		
 		String error_msg =validateOrderItems(item_list);
@@ -172,7 +174,7 @@ public class UserCouponController extends BaseController {
 	String find(HttpServletRequest request) throws Exception
 	{
 		//
-		return AesUtil.encode(VOConvert.ovoToJson(ovo));
+		return AesUtil.encode(VOConvert.ovoToJson(new OVO()));
 	}
 	
 	
@@ -186,7 +188,8 @@ public class UserCouponController extends BaseController {
 	String delete(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		OVO ovo =null;
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"收藏编号不能为空","收藏编号不能为空");
@@ -207,7 +210,8 @@ public class UserCouponController extends BaseController {
 	String pay(HttpServletRequest request) throws Exception
 	{
 		parseRequest(request);
-		String id =ivo.getString("id",null);
+		OVO ovo =null;
+		String id =getIvo().getString("id",null);
 		if(StringUtils.isEmptyOrNull(id))
 		{
 			ovo =new OVO(-1,"收藏编号不能为空","收藏编号不能为空");
