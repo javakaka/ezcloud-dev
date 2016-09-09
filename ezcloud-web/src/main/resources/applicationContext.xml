@@ -9,4 +9,5 @@
 	default-lazy-init="true">
 	<import resource="applicationContext-jpa.xml" />
 	<import resource="applicationContext-jdbc.xml" />
+	<import resource="applicationContext-mybatis.xml" />
 </beans>

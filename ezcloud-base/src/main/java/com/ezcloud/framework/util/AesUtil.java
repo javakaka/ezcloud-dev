@@ -17,7 +17,7 @@ import org.apache.commons.codec.binary.Base64;
 public class AesUtil {
 //	private static final byte[] aesKey="@365@gl@@shi@ke@".getBytes();
 //	private static final byte[] aesKey="fang@zhu@bao@app".getBytes();
-	private static final byte[] aesKey="cxhl@chi@chi@app".getBytes();
+	private static final byte[] aesKey="zang@gui@zhu@sou".getBytes();
 	private static SecretKey secretKey=new SecretKeySpec(aesKey,"AES");
 	
 	static{
