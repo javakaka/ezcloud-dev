@@ -42,6 +42,18 @@ public class SystemConfigService extends JdbcService{
 		return configArr;
 	}
 	
+	public String getConfigValue(String busiType, String busiCode)
+	{
+		String value = null;
+		String sql = "select busi_code_set from comm_system_signle_data_set  where busi_type='"
+				+ busiType
+				+ "' and busi_code='"
+				+ busiCode
+				+ "'";
+		value=queryField(sql);
+		return value;
+	}
+	
 	public DataSet getConfigData(String busiType)
 	{
 		String sql = "select busi_code,busi_code_set,set_memo from comm_system_signle_data_set  where busi_type='"+ busiType+ "' ";
