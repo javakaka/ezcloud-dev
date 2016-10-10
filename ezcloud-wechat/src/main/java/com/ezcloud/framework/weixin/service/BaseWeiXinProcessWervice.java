@@ -37,6 +37,20 @@ public abstract class BaseWeiXinProcessWervice {
 		public static final String REQUEST_MSG_TYPE_EVENT_LOCATION ="LOCATION";
 		//接收的用户点击事件消息
 		public static final String REQUEST_MSG_TYPE_EVENT_CLICK ="CLICK";
+		//接收用户的自定义菜单点击事件消息
+		public static final String REQUEST_MSG_TYPE_EVENT_VIEW ="VIEW";
+		//接收用户的自定义菜单点击  scancode_push：扫码推事件的事件推送
+		public static final String REQUEST_MSG_TYPE_EVENT_SCANCODE_PUSH ="scancode_push";
+		//接收用户的自定义菜单点击 scancode_waitmsg：扫码推事件且弹出“消息接收中”提示框的事件推送
+		public static final String REQUEST_MSG_TYPE_EVENT_SCANCODE_WAITMSG ="scancode_waitmsg";
+		//自定义菜单点击 pic_sysphoto：弹出系统拍照发图的事件推送
+		public static final String REQUEST_MSG_TYPE_EVENT_PIC_SYSPHOTO ="pic_sysphoto";
+		//自定义菜单点击 pic_photo_or_album：弹出拍照或者相册发图的事件推送
+		public static final String REQUEST_MSG_TYPE_EVENT_PIC_PHOTO_OR_ALBUM ="pic_photo_or_album";
+		//自定义菜单点击  pic_weixin：弹出微信相册发图器的事件推送
+		public static final String REQUEST_MSG_TYPE_EVENT_PIC_WEIXIN ="pic_weixin";
+		//自定义菜单点击  location_select：弹出地理位置选择器的事件推送
+		public static final String REQUEST_MSG_TYPE_EVENT_LOCATION_SELECT ="location_select";
 		/***返回的被动响应消息类型**/
 		//返回文本消息
 	    public static final String RESPONSE_MESSAGE_TYPE_TEXT = "text";
@@ -89,8 +103,22 @@ public abstract class BaseWeiXinProcessWervice {
 		public abstract OutMessage handleScanUnSubscribeEventMsgRequest(Object msg);
 		//处理上报地理位置事件
 		public abstract OutMessage handleLocationEventMsgRequest(Object msg);
-		//处理自定义菜单点击事件
+		//处理自定义菜单点击拉取消息事件
 		public abstract OutMessage handleClickEventMsgRequest(Object msg);
+		//处理自定义菜单点击拉取消息事件
+		public abstract OutMessage handleClickViewEventMsgRequest(Object msg);
+		//处理自定义菜单点击拉取消息事件
+		public abstract OutMessage handleClickScancodePushEventMsgRequest(Object msg);
+		//自定义菜单点击 scancode_waitmsg：扫码推事件且弹出“消息接收中”提示框的事件推送
+		public abstract OutMessage handleClickScancodeWaitmsgEventMsgRequest(Object msg);
+		//自定义菜单点击 pic_sysphoto：弹出系统拍照发图的事件推送
+		public abstract OutMessage handleClickPicSysphotoEventMsgRequest(Object msg);
+		//自定义菜单点击 pic_photo_or_album：弹出拍照或者相册发图的事件推送
+		public abstract OutMessage handleClickPicPhotoOrAlbumEventMsgRequest(Object msg);
+		//自定义菜单点击  pic_weixin：弹出微信相册发图器的事件推送
+		public abstract OutMessage handleClickPicWeixinEventMsgRequest(Object msg);
+		//自定义菜单点击  location_select：弹出地理位置选择器的事件推送
+		public abstract OutMessage handleClickLocationSelectEventMsgRequest(Object msg);
 		//处理关注事件
 		public abstract OutMessage handleSubscribeEventMsgRequest(Object msg);
 		//处理取消关注事件

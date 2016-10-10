@@ -10,10 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
 import com.ezcloud.framework.weixin.model.Articles;
 import com.ezcloud.framework.weixin.model.Message;
 import com.ezcloud.framework.weixin.model.request.InClickEventMessage;
@@ -44,6 +48,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class Tools {
 
+	private static Logger logger =Logger.getLogger( Tools.class );
 	public static String DicSort(String arr[])
 	{
 		String sortedStr ="";
@@ -52,7 +57,7 @@ public class Tools {
 			return null;
 		}
 		ary =arr;
-		System.out.println("Before sorted, the array is: " + Arrays.toString(ary));
+		logger.info("Before sorted, the array is: " + Arrays.toString(ary));
 		Arrays.sort(ary, new Comparator<String>(){
 			public int compare(String o1, String o2) {
 				String[] temp = {o1.toLowerCase(), o2.toLowerCase()};
@@ -68,7 +73,7 @@ public class Tools {
 		});
 		sortedStr =Arrays.toString(ary);
 		sortedStr =ary[0]+ary[1]+ary[2];
-		System.out.println("After sorted, the new array is: " + Arrays.toString(ary));
+		logger.info("After sorted, the new array is: " + Arrays.toString(ary));
 		return sortedStr;
 	}
 	
@@ -127,7 +132,7 @@ public class Tools {
             i++;
         }
         m.appendTail(sb);
-        System.out.println(sb.toString());
+        logger.info(sb.toString());
         replacedStr =sb.toString();
         return replacedStr;
 	}
@@ -143,28 +148,25 @@ public class Tools {
 	public static Map<String, String> parseXml(HttpServletRequest request) throws Exception {
 		// 将解析结果存储在HashMap中
 		Map<String, String> map = new HashMap<String, String>();
-
 		// 从request中取得输入流
 		InputStream inputStream = request.getInputStream();
 		// 读取输入流
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(inputStream);
+		logger.debug( "xml----------------->> "+document.asXML() );
 		// 得到xml根元素
 		Element root = document.getRootElement();
 		// 得到根元素的所有子节点
 		List<Element> elementList = root.elements();
-
 		// 遍历所有子节点
 		for (Element e : elementList)
 		{
 			map.put(e.getName(), e.getText());
-			System.out.println("String "+e.getName()+" ="+e.getText());
+			logger.debug( "xml element "+e.getName()+" ="+e.getText() );
 		}
-
 		// 释放资源
 		inputStream.close();
 		inputStream = null;
-
 		return map;
 	}
 	
@@ -197,7 +199,7 @@ public class Tools {
 		for (Element e : elementList)
 		{
 			map.put(e.getName(), e.getText());
-			System.out.println("String "+e.getName()+" ="+e.getText());
+			logger.info("String "+e.getName()+" ="+e.getText());
 		}
 
 		// 释放资源
@@ -438,6 +440,16 @@ public class Tools {
 		 * 4.已关注公众号时扫描
 		 * 5.上报地理位置
 		 * 6.自定义菜单点击
+		 * 
+		 * 	自定义菜单细分为：
+		 * 	1 点击菜单拉取消息时的事件推送
+		 *	2 点击菜单跳转链接时的事件推送
+		 *	3 scancode_push：扫码推事件的事件推送
+		 *	4 scancode_waitmsg：扫码推事件且弹出“消息接收中”提示框的事件推送
+		 *	5 pic_sysphoto：弹出系统拍照发图的事件推送
+		 *	6 pic_photo_or_album：弹出拍照或者相册发图的事件推送
+		 *	7 pic_weixin：弹出微信相册发图器的事件推送
+		 *	8 location_select：弹出地理位置选择器的事件推送
 		 */
 		else if(MsgType.equals(WeiXinProcessService.REQUEST_MSG_TYPE_EVENT))
 		{
@@ -491,19 +503,47 @@ public class Tools {
 			bIsClick =map.containsKey("EventKey");
 			if(bIsClick)
 			{
-				System.out.println("come in menu click .....");
-				bIsSubOrUnsub =true;
+				logger.info("come in menu click .....");
+				bIsSubOrUnsub =false;
 				EventKey =map.get("EventKey");
 				if(Event.trim().equalsIgnoreCase("CLICK"))
 				{
 					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_CLICK);
-					InClickEventMessage oClickEventMessage =new InClickEventMessage(ToUserName, FromUserName, CreateTime, MsgType, Event, EventKey);
-					return oClickEventMessage;
 				}
+				else if(Event.trim().equalsIgnoreCase("VIEW"))
+				{
+					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_VIEW);
+				}
+				else if(Event.trim().equalsIgnoreCase("scancode_push"))
+				{
+					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_SCANCODE_PUSH);
+				}
+				else if(Event.trim().equalsIgnoreCase("scancode_waitmsg"))
+				{
+					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_SCANCODE_WAITMSG);
+				}
+				else if(Event.trim().equalsIgnoreCase("pic_sysphoto"))
+				{
+					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_PIC_SYSPHOTO);
+				}
+				else if(Event.trim().equalsIgnoreCase("pic_photo_or_album"))
+				{
+					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_PIC_PHOTO_OR_ALBUM);
+				}
+				else if(Event.trim().equalsIgnoreCase("pic_weixin"))
+				{
+					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_PIC_WEIXIN);
+				}
+				else if(Event.trim().equalsIgnoreCase("location_select"))
+				{
+					map.put("MsgType", BaseWeiXinProcessWervice.REQUEST_MSG_TYPE_EVENT_LOCATION_SELECT);
+				}
+				InClickEventMessage oClickEventMessage =new InClickEventMessage(ToUserName, FromUserName, CreateTime, MsgType, Event, EventKey);
+				return oClickEventMessage;
 			}
 			if(bIsSubOrUnsub)
 			{
-				System.out.println("come in SubOrUnsub .....");
+				logger.info("come in SubOrUnsub .....");
 				//订阅
 				if(Event.trim().equalsIgnoreCase("subscribe"))
 				{
@@ -635,7 +675,7 @@ public class Tools {
 //		 String signature="0a18c5be6706b5874fc1e5601b46350a516f9912";
 //		 
 //		 boolean b =Tools.specifySignaiture(_token, signature, timestamp, nonce);
-//		 System.out.println("ok？==============="+b);
+//		 logger.info("ok？==============="+b);
 		String ToUserName ="gh_1cfd6d0c3703";
 		String FromUserName ="opqmsjgwQ-l7FvhidwsLBlubdT8o";
 		String CreateTime ="1381910170";

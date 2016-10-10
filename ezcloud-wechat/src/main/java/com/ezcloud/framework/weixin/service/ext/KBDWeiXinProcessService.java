@@ -296,4 +296,46 @@ public class KBDWeiXinProcessService  extends BaseWeiXinProcessWervice{
 		return outMessage;
 	}
 
+	@Override
+	public OutMessage handleClickViewEventMsgRequest(Object msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OutMessage handleClickScancodePushEventMsgRequest(Object msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OutMessage handleClickScancodeWaitmsgEventMsgRequest(Object msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OutMessage handleClickPicSysphotoEventMsgRequest(Object msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OutMessage handleClickPicPhotoOrAlbumEventMsgRequest(Object msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OutMessage handleClickPicWeixinEventMsgRequest(Object msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OutMessage handleClickLocationSelectEventMsgRequest(Object msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

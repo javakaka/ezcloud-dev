@@ -115,9 +115,9 @@ public class WeixinUtil {
 		httpUrlConn.disconnect();
 		jsonObject = JSONObject.fromObject(buffer.toString());
 		} catch (ConnectException ce) {
-		//log.error("Weixin server connection timed out.");
+		log.error("Weixin server connection timed out.");
 		} catch (Exception e) {
-		//log.error("https request error:{}", e);
+		log.error("https request error:{}", e);
 		}
 		return jsonObject;
 		//return null;
@@ -161,6 +161,7 @@ public class WeixinUtil {
 			
 			String requestUrl = auth_access_token_url.replace("APPID", appid).replace("APPSECRET", appsecret).replace("CODE", code);
 			JSONObject jsonObject = httpRequest(requestUrl, "GET", null);
+			log.info("jsonObject===========================>>"+jsonObject.toString());
 //			System.out.println("jsonObject===========================>>"+jsonObject.toString());
 			// 如果请求成功
 			if (null != jsonObject) {
@@ -176,7 +177,7 @@ public class WeixinUtil {
 					e.printStackTrace();
 					accessToken = null;
 					// 获取token失败
-					log.error("获取token失败 errcode:{} errmsg:{}", jsonObject.getInt("errcode"), jsonObject.getString("errmsg"));
+					log.info("获取token失败 errcode:{} errmsg:{}", jsonObject.getInt("errcode"), jsonObject.getString("errmsg"));
 				}
 			}
 			return accessToken;
@@ -465,12 +466,12 @@ public class WeixinUtil {
 			btn11.setName("掌柜积分");
 			btn11.setType("view");
 //			btn11.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5bf17995fe86d1e6&redirect_uri=http%3A%2F%2Ftestweixin.hqzgzs.com%2Fcrds%2Fwx%2Fsite%2Fbase-auth-score.jhtml&response_type=code&scope=snsapi_base&state=123#wechat_redirect");
-			btn11.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5bf17995fe86d1e6&redirect_uri=http%3A%2F%2Ftestweixin.hqzgzs.com%2Fcrds%2Fwx%2Fsite%2Fbase-auth-score.jhtml&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
+			btn11.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5bf17995fe86d1e6&redirect_uri=http%3A%2F%2Fweixin.sectc.cn%2Fcrds%2Fwx%2Fsite%2Fbase-auth-score.jhtml&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
 			
 			CommonViewBottun btn12 = new CommonViewBottun();
 			btn12.setName("官网");
 			btn12.setType("view");
-			btn12.setUrl("http://testweixin.hqzgzs.com/");	
+			btn12.setUrl("http://weixin.sectc.cn/");
 			
 			CommonViewBottun btn21 = new CommonViewBottun();
 			btn21.setName("粉丝社区");
