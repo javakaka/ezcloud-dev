@@ -155,6 +155,8 @@ function tableClick( tableName, obj){
 				
 				//列表接口 显示的字段  list-api-show-fields
 				var listApiShowHtml ="";
+				//列表接口 搜索的字段  list-api-show-fields
+				var listApiSearchHtml ="";
 				//添加接口 显示的字段  add-api-show-fields
 				var addApiShowHtml ="";
 				//编辑接口 显示的字段  edit-api-show-fields
@@ -223,28 +225,31 @@ function tableClick( tableName, obj){
 					deletePageWhereHtml +="<input type=\"radio\" id=\"delete-page-where-field-"+i+"\" name=\"delete-page-where-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
 					//列表接口 显示的字段  list-api-show-fields
 					listApiShowHtml +="<input type=\"checkbox\" id=\"list-api-show-field-"+i+"\" name=\"list-api-show-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
+					//列表接口搜索的字段  list-api-search-fields
+					listApiSearchHtml +="<input type=\"checkbox\" id=\"list-api-search-field-"+i+"\" name=\"list-api-search-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
 					//添加接口 显示的字段  add-api-show-fields
-					addApiShowHtml +="<input type=\"checkbox\" id=\"list-page-show-field-"+i+"\" name=\"list-page-show-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
+					addApiShowHtml +="<input type=\"checkbox\" id=\"add-api-show-field-"+i+"\" name=\"add-api-show-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
 					//编辑接口 显示的字段  edit-api-show-fields
-					editApiShowHtml +="<input type=\"checkbox\" id=\"list-page-show-field-"+i+"\" name=\"list-page-show-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
+					editApiShowHtml +="<input type=\"checkbox\" id=\"edit-api-show-field-"+i+"\" name=\"edit-api-show-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
 					//删除接口 显示的字段 delete-api-where
 					deleteApiShowHtml +="<input type=\"checkbox\" id=\"delete-api-where-field-"+i+"\" name=\"delete-api-where-field\" value=\""+ entityAttributeName +"\" />"+entityAttributeName;
 				});
-				$("#entityFields").html(entityHtml);
+				$("#entityFields").html( entityHtml );
 				
-				$("#list-page-show-fields").html(listPageShowHtml);
+				$("#list-page-show-fields").html( listPageShowHtml );
 				
-				$("#list-page-search-fields").html(listPageSearchHtml);
+				$("#list-page-search-fields").html( listPageSearchHtml );
 				
-				$("#add-page-show-fields").html(addPageShowHtml);
+				$("#add-page-show-fields").html( addPageShowHtml );
 				
-				$("#edit-page-show-fields").html(editPageShowHtml);
+				$("#edit-page-show-fields").html( editPageShowHtml );
 				
-				$("#delete-page-where").html(deletePageWhereHtml);
-				$("#list-api-show-fields").html(listApiShowHtml);
-				$("#add-api-show-fields").html(addApiShowHtml);
-				$("#edit-api-show-fields").html(editApiShowHtml);
-				$("#delete-api-where").html(deleteApiShowHtml);
+				$("#delete-page-where").html( deletePageWhereHtml );
+				$("#list-api-show-fields").html( listApiShowHtml );
+				$("#list-api-search-fields").html( listApiSearchHtml );
+				$("#add-api-show-fields").html( addApiShowHtml );
+				$("#edit-api-show-fields").html( editApiShowHtml );
+				$("#delete-api-where").html( deleteApiShowHtml );
 			}
 			else
 			{
@@ -578,10 +583,12 @@ var AttributeTypeSelectOptionHtml =" "
 		var listApiMethod =$("#list-api-method").val();
 		var listApiRemark =$("#list-api-remark").val();
 		var listApiShowFields =$('input[name="list-api-show-field"]:checked').serialize();
+		var listApiSearchFields =$('input[name="list-api-search-field"]:checked').serialize();
 		params.put("listApiUri",listApiUri);
 		params.put("listApiMethod",listApiMethod);
 		params.put("listApiRemark",listApiRemark);
 		params.put("listApiShowFields",listApiShowFields);
+		params.put("listApiSearchFields",listApiSearchFields);
 		// 添加接口参数
 		var addApiUri =$("#add-api-uri").val();
 		var addApiMethod =$("#add-api-method").val();
@@ -635,6 +642,41 @@ var AttributeTypeSelectOptionHtml =" "
 				$.message("error","操作失败");
 			}
 		});
+	}
+	
+	/**
+	*checkbox选择框的总按钮，全选或者取消全选
+	*/
+	function checkboxSwitch(obj,inputName)
+	{
+		if( obj.checked ==true ){
+			console.log('.................................2');
+			obj.checked =true;
+			 $("[name = "+inputName+"]:checkbox").attr("checked", true);
+		}
+		else
+		{
+			console.log('.................................1');
+			obj.checked =false;
+			 $("[name = "+inputName+"]:checkbox").attr("checked", false);
+		}
+	}
+	/**
+	*radiobox选择框的总按钮，全选或者取消全选
+	*/
+	function radioboxSwitch(obj,inputName)
+	{
+		if( obj.checked ==true ){
+			console.log('.................................2');
+			obj.checked =true;
+			 $("[name = "+inputName+"]:radio").attr("checked", true);
+		}
+		else
+		{
+			console.log('.................................1');
+			obj.checked =false;
+			 $("[name = "+inputName+"]:radio").attr("checked", false);
+		}
 	}
 </script>
 <style type="text/css">
@@ -1077,27 +1119,38 @@ width: 1690px;
 							<input type="text" id="list-page-remark" name="list-page-remark" value="备注" class="config-value" />
 						</div>
 						<div class="config-item">
-							<label class="config-label">展示的字段：</label> 
+							<!-- 快捷操作按钮，全选或者全部取消选择 -->
+							<label class="config-label">展示的字段
+							<input type="checkbox" id="list-page-show-field-switch" name="list-page-show-field-switch" onclick="checkboxSwitch(this,'list-page-show-field')"/>
+							：</label> 
 							<div id="list-page-show-fields">
+							<!-- 
 								<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
 								<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
 								<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
 								<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
 								<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+							 -->
 							</div>
 						</div>
 						<div class="config-item">
-							<label class="config-label">搜索的字段：</label> 
+							<label class="config-label">搜索的字段
+							<input type="checkbox" id="list-page-search-field-switch" name="list-page-search-field-switch" onclick="checkboxSwitch(this,'list-page-search-field')"/>
+							：</label> 
 							<div id="list-page-search-fields">
+							<!-- 
 								<input type="checkbox" id="list-page-search-field1" name="list-page-search-field" value="add" />字段
 								<input type="checkbox" id="list-page-search-field2" name="list-page-search-field" value="add" />字段
 								<input type="checkbox" id="list-page-search-field3" name="list-page-search-field" value="add" />字段
 								<input type="checkbox" id="list-page-search-field4" name="list-page-search-field" value="add" />字段
 								<input type="checkbox" id="list-page-search-field5" name="list-page-search-field" value="add" />字段
+							 -->
 							</div>
 						</div>
 						<div class="config-item">
-							<label class="config-label">操作按钮：</label> 
+							<label class="config-label">操作按钮
+							<input type="checkbox" id="list-page-function-btn-switch" name="list-page-function-btn-switch" onclick="checkboxSwitch(this,'list-page-function-btn')"/>
+							：</label> 
 							<input type="checkbox" id="list-page-add-btn" name="list-page-function-btn" value="add" />添加
 							<input type="checkbox" id="list-page-delete-btn" name="list-page-function-btn" value="delete" />删除
 							<input type="checkbox" id="list-page-refresh-btn" name="list-page-function-btn" value="refresh" />刷新
@@ -1111,7 +1164,7 @@ width: 1690px;
 						<legend>添加界面</legend>
 						<div class="config-item">
 							<label class="config-label">URI：</label> 
-							<input type="text" id="add-page-uri" name="add-page-uri" value=add"" class="config-value" />
+							<input type="text" id="add-page-uri" name="add-page-uri" value="add" class="config-value" />
 						</div>
 						<div class="config-item">
 							<label class="config-label">Cotroller 方法名：</label> 
@@ -1122,10 +1175,14 @@ width: 1690px;
 							<input type="text" id="add-page-remark" name="add-page-remark" value="备注" class="config-value" />
 						</div>
 						<div class="config-item">
-							<label class="config-label">展示的字段：</label> 
+							<label class="config-label">展示的字段
+							<input type="checkbox" id="add-page-show-field-switch" name="add-page-show-field-switch" onclick="checkboxSwitch(this,'add-page-show-field')"/>
+							：</label> 
 							<div id="add-page-show-fields">
+							<!-- 
 								<input type="checkbox" id="add-page-show-field-1" name="add-page-show-field" value="add" />字段1
 								<input type="checkbox" id="add-page-show-field-2" name="add-page-show-field" value="add" />字段2
+							-->
 							</div>
 						</div>
 					</fieldset>
@@ -1146,13 +1203,17 @@ width: 1690px;
 							<input type="text" id="edit-page-remark" name="edit-page-remark" value="备注" class="config-value" />
 						</div>
 						<div class="config-item">
-							<label class="config-label">展示的字段：</label> 
+							<label class="config-label">展示的字段
+							<input type="checkbox" id="edit-page-show-field-switch" name="edit-page-show-field-switch" onclick="checkboxSwitch(this,'edit-page-show-field')"/>
+							：</label> 
 							<div id="edit-page-show-fields">
+							<!-- 
 								<input type="checkbox" id="edit-page-show-field-1" name="edit-page-show-field" value="add" />字段1
 								<input type="checkbox" id="edit-page-show-field-2" name="edit-page-show-field" value="add" />字段2
 								<input type="checkbox" id="edit-page-show-field-3" name="edit-page-show-field" value="add" />字段3
 								<input type="checkbox" id="edit-page-show-field-4" name="edit-page-show-field" value="add" />字段4
 								<input type="checkbox" id="edit-page-show-field-5" name="edit-page-show-field" value="add" />字段5
+							 -->
 							</div>
 						</div>
 					</fieldset>
@@ -1175,9 +1236,11 @@ width: 1690px;
 						<div class="config-item">
 							<label class="config-label">条件字段：</label> 
 							<div id="delete-page-where">
+							<!-- 
 								<input type="radio" id="delete-page-where-field-1" name="delete-page-where-field" value="add" />字段1
 								<input type="radio" id="delete-page-where-field-2" name="delete-page-where-field" value="add" />字段2
 								<input type="radio" id="delete-page-where-field-3" name="delete-page-where-field" value="add" />字段3
+							 -->
 							</div>
 						</div>
 					</fieldset>
@@ -1198,19 +1261,22 @@ width: 1690px;
 							<input type="text" id="list-api-remark" name="list-api-remark" value="备注" class="config-value" />
 						</div>
 						<div class="config-item">
-							<label class="config-label">展示的字段：</label> 
+							<label class="config-label">展示的字段
+							<input type="checkbox" id="list-api-show-field-switch" name="list-api-show-field-switch" onclick="checkboxSwitch(this,'list-api-show-field')"/>
+							：</label> 
 							<div id="list-api-show-fields">
 								<input type="checkbox" id="list-api-show-field-1" name="list-api-show-field" value="add" />字段1
 							</div>
 						</div>
 						<div class="config-item">
-							<label class="config-label">搜索的字段：</label> 
+							<label class="config-label">搜索的字段
+							<input type="checkbox" id="list-api-search-field-switch" name="list-api-search-field-switch" onclick="checkboxSwitch(this,'list-api-search-field')"/>
+							：</label> 
 							<div id="list-api-search-fields">
-								<input type="checkbox" id="list-page-search-field1" name="list-page-search-field" value="add" />字段
-								<input type="checkbox" id="list-page-search-field2" name="list-page-search-field" value="add" />字段
-								<input type="checkbox" id="list-page-search-field3" name="list-page-search-field" value="add" />字段
-								<input type="checkbox" id="list-page-search-field4" name="list-page-search-field" value="add" />字段
-								<input type="checkbox" id="list-page-search-field5" name="list-page-search-field" value="add" />字段
+							<!-- 
+								<input type="checkbox" id="list-api-search-field1" name="list-api-search-field" value="add" />字段
+								<input type="checkbox" id="list-api-search-field2" name="list-api-search-field" value="add" />字段
+							-->
 							</div>
 						</div>
 						<div class="config-item">
@@ -1242,13 +1308,14 @@ width: 1690px;
 							<input type="text" id="add-api-remark" name="add-api-remark" value="备注" class="config-value" />
 						</div>
 						<div class="config-item">
-							<label class="config-label">展示的字段：</label> 
+							<label class="config-label">展示的字段
+							<input type="checkbox" id="add-api-show-field-switch" name="add-api-show-field-switch" onclick="checkboxSwitch(this,'add-api-show-field')"/>
+							：</label> 
 							<div id="add-api-show-fields">
-								<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
-								<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
-								<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
-								<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
-								<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+							<!-- 
+								<input type="checkbox" id="add-api-show-field-1" name="add-api-show-field" value="add" />字段1
+								<input type="checkbox" id="add-api-show-field-2" name="add-api-show-field" value="add" />字段2
+							 -->
 							</div>
 						</div>
 					</fieldset>
@@ -1269,13 +1336,13 @@ width: 1690px;
 							<input type="text" id="edit-api-remark" name="edit-api-remark" value="备注" class="config-value" />
 						</div>
 						<div class="config-item">
-							<label class="config-label">展示的字段：</label> 
+							<label class="config-label">展示的字段
+							<input type="checkbox" id="edit-api-show-field-switch" name="edit-api-show-field-switch" onclick="checkboxSwitch(this,'edit-api-show-field')"/>
+							：</label> 
 							<div id="edit-api-show-fields">
-								<input type="checkbox" id="list-page-show-field-1" name="list-page-show-field" value="add" />字段1
-								<input type="checkbox" id="list-page-show-field-2" name="list-page-show-field" value="add" />字段2
-								<input type="checkbox" id="list-page-show-field-3" name="list-page-show-field" value="add" />字段3
-								<input type="checkbox" id="list-page-show-field-4" name="list-page-show-field" value="add" />字段4
-								<input type="checkbox" id="list-page-show-field-5" name="list-page-show-field" value="add" />字段5
+							<!-- 
+								<input type="checkbox" id="edit-api-show-field-1" name="edit-api-show-field" value="add" />字段1
+							 -->
 							</div>
 						</div>
 					</fieldset>
@@ -1296,9 +1363,13 @@ width: 1690px;
 							<input type="text" id="delete-api-remark" name="delete-api-remark" value="备注" class="config-value" />
 						</div>
 						<div class="config-item">
-							<label class="config-label">条件字段：</label> 
+							<label class="config-label">条件字段
+							<input type="checkbox" id="delete-api-where-field-switch" name="delete-api-where-field-switch" onclick="checkboxSwitch(this,'delete-api-where-field')"/>
+							：</label> 
 							<div id="delete-api-where">
+							<!-- 
 								<input type="checkbox" id="delete-api-show-field-1" name="delete-api-show-field" value="add" />字段1
+							 -->
 							</div>
 						</div>
 					</fieldset>

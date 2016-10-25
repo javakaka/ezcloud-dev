@@ -80,16 +80,27 @@ public class AesUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	public static String encode(String input) throws Exception{
-		if(input==null || "".equals(input) || "null".equals(input)){
+	public static String encode(String input)
+	{
+		if(input==null || "".equals(input) || "null".equals(input))
+		{
 			input = "";
 		}
-			if(null!=input&&!"".equals(input)){
+		try 
+		{
+			if(null!=input&&!"".equals(input))
+			{
 				return encrypt(input);
-			}else{
+			}
+			else
+			{
 				return "";
 			}
-
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+			return "";
+		}
 	}
 	
 	/**

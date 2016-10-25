@@ -62,8 +62,7 @@ public class LanguageController  extends BaseController{
 	}
 
 	@RequestMapping(value = "/delete")
-	public @ResponseBody
-	Message delete(String[] ids) {
+	public @ResponseBody Message delete(String[] ids) {
 		language.delete(ids);
 		return SUCCESS_MESSAGE;
 	}

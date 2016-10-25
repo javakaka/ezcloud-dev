@@ -20,6 +20,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileSystemView;
@@ -27,8 +29,6 @@ import javax.swing.filechooser.FileSystemView;
 import com.ezcloud.framework.vo.DataSet;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
-import net.sf.json.JSONObject;
  
  public class FileUtil
  {
@@ -795,6 +795,78 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
 	   return bool;
    }
    
+   /**
+    * 从jar包读取指定的文件
+    * @param path 文件全路径，比如： test/conf.xml
+    * @return
+    */
+   public static String readFileFromJarByJarName(String jarName, String path){
+	   String content =null;
+	   JarFile file;
+	   try {
+			file = new JarFile(new File( jarName ));
+			JarEntry entry = file.getJarEntry( path );
+			content =convertStreamToString( file.getInputStream(entry) );
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	   return content;
+   }
+   
+   /**
+    * 从jar 文件读取指定的文件内容
+    * @param jarFullPath
+    * @param path 文件全路径，比如： test/conf.xml
+    * @return
+    */
+   public static String readFileFromJarByJarPath(String jarFullPath, String path){
+	   String content =null;
+	   JarFile file;
+	   try {
+		   file = new JarFile(new File( jarFullPath ));
+		   JarEntry entry = file.getJarEntry( path );
+		   content =convertStreamToString( file.getInputStream(entry) );
+	   }
+	   catch (IOException e) {
+		   e.printStackTrace();
+	   }
+	   return content;
+   }
+   
+   /**
+    * 将输入流转成字符串
+    * @param is
+    * @return
+    */
+   public static String convertStreamToString(InputStream is) 
+   {
+	   BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	   StringBuilder sb = new StringBuilder();
+	   String line = null;
+	   try 
+	   {
+		   while ((line = reader.readLine()) != null) {
+			   sb.append(line + "\n");
+	   }
+	   } 
+	   catch (IOException e) 
+	   {
+		   e.printStackTrace();
+	   } 
+	   finally 
+	   {
+		   try 
+		   {
+			   is.close();
+		   } 
+		   catch (IOException e) 
+		   {
+			   e.printStackTrace();
+		   }
+	   }
+	   return sb.toString();
+	 }
    public static void main(String[] args) {
 //	   HashMap<String ,Object> map =queryAllPreFolders("D:/programs/adobe/");
 //	   System.out.println( "---------------" +map );
@@ -803,8 +875,13 @@ public static boolean reduceImg(String paramString1, String paramString2, int pa
 //	   System.out.println( "---------------" +listFolder( "D:/" ) );
 //	   System.out.println( "---------------" +listFolder( "D:/programs/360/" ) );
 //	   System.out.println( "---------------" +mkdir("/Users/TongJianbo/work/88") );
-	   System.out.println( "---------------" +isDirExisted("d:/12345/666",true) );
+//	   System.out.println( "---------------" +isDirExisted("d:/12345/666",true) );
+	   String jarPath ="D:/RUN_SYSTEM/server/tomcat7/webapps/ezcloud-web/WEB-INF/lib/ezcloud-robot-1.0.jar";
+	   String filePath ="robot-template/default/list.jsp";
+	   String cc =readFileFromJarByJarPath( jarPath, filePath );
+	   System.out.println( "cc is:" +cc);
 }
+   
    
  }
 

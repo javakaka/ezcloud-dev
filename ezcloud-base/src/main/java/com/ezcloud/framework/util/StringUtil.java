@@ -390,6 +390,36 @@ public static String getFileBase64(String paramString)
 			return 0;
 		}
 	}
+	
+	/**
+	 * 将字符串的首字母转成大写
+	 * @param str
+	 * @return
+	 */
+	public static String convertFirstCharToUpperCase(String str){
+		char firstChar =str.charAt( 0 );
+		if ( Character.isUpperCase( firstChar ) ) {
+			return str;
+		}
+		firstChar =Character.toUpperCase( firstChar );
+		str =String.valueOf( firstChar )+str.substring( 1 );
+		return str;
+	}
+	
+	/**
+	 * 将字符串的首字母转成小写
+	 * @param str
+	 * @return
+	 */
+	public static String convertFirstCharToLowerCase(String str){
+		char firstChar =str.charAt( 0 );
+		if ( Character.isLowerCase( firstChar ) ) {
+			return str;
+		}
+		firstChar =Character.toLowerCase( firstChar );
+		str =String.valueOf( firstChar )+str.substring( 1 );
+		return str;
+	}
    public static void main(String s[])
    {
 	   String s1 ="fkfdhfjdsfhdsjf1=akjfdskfsf1=ajkfjfk";

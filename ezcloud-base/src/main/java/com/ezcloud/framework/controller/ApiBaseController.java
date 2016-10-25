@@ -79,13 +79,13 @@ public class ApiBaseController {
 		return SpringUtils.getMessage(code, args);
 	}
 	
-	public void parseRequest(HttpServletRequest request)
+	public IVO parseRequest(HttpServletRequest request)
 	{
-		IVO iivo =(IVO)request.getAttribute("ivo");
-		if(iivo == null )
+		IVO ivo =(IVO)request.getAttribute("ivo");
+		if(ivo == null )
 		{
-			iivo = new IVO();
+			ivo = new IVO();
 		}
-		setIvo( iivo );
+		return ivo;
 	}
 }
