@@ -686,7 +686,7 @@ width: 1690px;
 .pageContent {
 	width: 100%;
 	height: auto;
-	border: 1px solid red;
+	border: 1px solid #0e0e0e;
 	overflow-y: scroll;
 }
 
@@ -701,7 +701,7 @@ width: 1690px;
 .tableList {
 	width: 20%;
 	height: 800px;
-	border-right: red solid 1px;
+	border-right: #0e0e0e solid 1px;
 }
 
 .fields {
