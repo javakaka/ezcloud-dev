@@ -463,7 +463,7 @@ public class WeixinUtil {
 		private static WeiXinMenu getSzhqWeixinMenu() {
 			WeiXinMenu menu =new WeiXinMenu();
 			CommonViewBottun btn11 = new CommonViewBottun();
-			btn11.setName("掌柜积分");
+			btn11.setName("华强信用");
 			btn11.setType("view");
 //			btn11.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5bf17995fe86d1e6&redirect_uri=http%3A%2F%2Ftestweixin.hqzgzs.com%2Fcrds%2Fwx%2Fsite%2Fbase-auth-score.jhtml&response_type=code&scope=snsapi_base&state=123#wechat_redirect");
 			btn11.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5bf17995fe86d1e6&redirect_uri=http%3A%2F%2Fweixin.sectc.cn%2Fcrds%2Fwx%2Fsite%2Fbase-auth-score.jhtml&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
@@ -496,7 +496,7 @@ public class WeixinUtil {
 		//	        mainBtn3.setName("成功案例");
 		//	        mainBtn3.setSub_button(new Button[] { btn31, btn32}); 
 			
-			menu.setButton(new Button[] { mainBtn1, mainBtn2 });
+			menu.setButton(new Button[] { btn11,  mainBtn2});
 			return menu;
 		}
 		
