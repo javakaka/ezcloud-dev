@@ -499,10 +499,48 @@ public class WeixinUtil {
 			menu.setButton(new Button[] { btn11,  mainBtn2});
 			return menu;
 		}
+		private static WeiXinMenu getJBHWeixinMenu() {
+			WeiXinMenu menu =new WeiXinMenu();
+			CommonViewBottun btn11 = new CommonViewBottun();
+			btn11.setName("爽乐购商城");
+			btn11.setType("view");
+			btn11.setUrl("http://120.76.161.208/jbh/junbinghui/demo/1.html");
+			
+			CommonViewBottun btn12 = new CommonViewBottun();
+			btn12.setName("微信商城");
+			btn12.setType("view");
+			btn12.setUrl("http://120.76.161.208/jbh/junbinghui/demo/1.html");
+			
+			CommonViewBottun btn13 = new CommonViewBottun();
+			btn13.setName("商业交流会");
+			btn13.setType("view");
+			btn13.setUrl("http://120.76.161.208/jbh/junbinghui/regpage/app/front/reg/reg.jsp");	
+			
+//			CommonViewBottun btn31 = new CommonViewBottun();
+//			btn31.setName("微信小店");
+//			btn31.setType("view");
+//			btn31.setUrl("http://mp.weixin.qq.com/bizmall/mallshelf?id=&t=mall/list&biz=MzA5Nzk3MzQzNA==&shelf_id=5&showwxpaytitle=1#wechat_redirect");
+			
+			
+			ComplexButton mainBtn1 = new ComplexButton();
+			mainBtn1.setName("服务平台");  
+			mainBtn1.setSub_button(new Button[] { btn11, btn12});
+			
+			ComplexButton mainBtn2 = new ComplexButton();
+			mainBtn2.setName("粉丝互动");  
+			mainBtn2.setSub_button(new Button[] { btn13}); 
+			
+			//	        ComplexButton mainBtn3 = new ComplexButton();
+			//	        mainBtn3.setName("成功案例");
+			//	        mainBtn3.setSub_button(new Button[] { btn31, btn32}); 
+			
+			menu.setButton(new Button[] { btn11,  btn12, btn13});
+			return menu;
+		}
 		
 		public static void main(String s[])
 		{
-			/** 取acces_token**/
+			/** 取acces_token **/
 			String appId ="wx5bf17995fe86d1e6";
 			String appSecret ="777ff79bed38a61fe142a7c821318d06";
 			AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
@@ -512,7 +550,7 @@ public class WeixinUtil {
 			String menu ="";
 			/**取自定义菜单（可通过取数据库代替）***/
 //			WeiXinMenu mm =getMenu();
-			WeiXinMenu mm =getSzhqWeixinMenu();
+			WeiXinMenu mm =getJBHWeixinMenu();
 			JSONObject obj =JSONObject.fromObject(mm);
 			menu =obj.toString();
 			System.out.print("menu------------------"+menu);

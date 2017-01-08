@@ -38,9 +38,15 @@ public class MonitorWeixinTicketStateJob extends JdbcService{
 	@Value(value="${framework.weixin.appSecret}")
 	private String appSecret;
 	
+	@Value(value="${framework.weixin.ticket.state.monitor.run}")
+	private String run;
+	
 	@Scheduled(cron = "${framework.weixin.ticket.state.monitor.cron}")
 	public void synWeixinTicket()
 	{
+		if (StringUtils.isEmptyOrNull(run) || !run.equals("1")) {
+			return;
+		}
 		Row row=weixinTicketService.queryByPMAndState("1","1");
 		AccessToken token =null;
 		String access_token ="";
