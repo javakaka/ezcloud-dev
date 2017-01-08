@@ -1,8 +1,11 @@
 package com.ezcloud.framework.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +13,15 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import com.ezcloud.framework.vo.DataSet;
+import com.ezcloud.framework.vo.Row;
 /**
  * 
  * 
@@ -166,5 +175,93 @@ public class ExcelUtil {
 	            System.out.println();
 	        }
 	    }
+	    
+	    /**
+	     * 
+	     * @param titleDs 中文标题列表
+	     * @param keyDs   数据字段key列表
+	     * @param dataDs  数据列表
+	     * @param out_path 文件保存路径
+	     * @throws IOException
+	     */
+	    public static void writeExcel(DataSet titleDs,DataSet keyDs,DataSet dataDs,
+	    		String out_path,String fileName,String sheetName,int rowHeight) throws IOException
+	    {
+	        String exportPath = out_path+"/"+fileName;
+	        FileUtil.mkdir(out_path);
+	        OutputStream out = new FileOutputStream(new File(exportPath));  
+	  
+	        // 声明一个工作薄  
+	        HSSFWorkbook workbook = new HSSFWorkbook();  
+	        // 生成一个表格  
+	        if(StringUtils.isEmptyOrNull(sheetName))
+	        {
+	        	sheetName ="SHEET_"+DateUtil.getCurrentDateTime().replaceAll(":", "").replaceAll("-", "").replaceAll(" ", "");
+	        }
+	        HSSFSheet sheet = workbook.createSheet(sheetName);  
+	        // 设置表格默认列宽度为15个字节  
+	        sheet.setDefaultColumnWidth(15);  
+	        // 设置标题  
+	        HSSFCellStyle titleStyle = workbook.createCellStyle();  
+	        // 居中显示  
+	        titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);  
+	       
+	        // 标题字体  
+	        HSSFFont titleFont = workbook.createFont();  
+	        // 字体大小  
+//	        titleFont.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);  
+	        titleFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);  
+	        titleStyle.setFont(titleFont);  
+	  
+	        HSSFCellStyle contentStyle = workbook.createCellStyle();  
+	        contentStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);  
+	        HSSFFont contentFont = workbook.createFont();  
+	        contentFont.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);  
+	        contentStyle.setFont(contentFont);  
+	  
+	        // 产生表格标题行  
+	        HSSFRow row = sheet.createRow(0);
+	        for (int i = 0; i < titleDs.size(); i++) 
+	        {  
+	            HSSFCell cell = row.createCell(i);  
+	            HSSFRichTextString text = new HSSFRichTextString(String.valueOf(titleDs.get(i)));  
+	            cell.setCellValue(text);  
+	            cell.setCellStyle(titleStyle);  
+	        }  
+	        int rowCount = 1;  
+	        for (int i = 0; i < dataDs.size(); i++, rowCount++) 
+	        {  
+	            HSSFRow dataRow = sheet.createRow(rowCount);  
+	            if(rowHeight > 0)
+	            {
+	            	dataRow.setHeight((short)rowHeight);
+	            }
+	            Row data_row = (Row)dataDs.get(i);  
+	            for (int j = 0; j < keyDs.size(); j++) 
+	            {  
+	            	HSSFCell cell = dataRow.createCell(j);
+	            	String value =data_row.getString(String.valueOf(keyDs.get(j)));
+	            	if(StringUtils.isEmptyOrNull(value))
+	            	{
+	            		value ="";
+	            	}
+	            	cell.setCellValue(value);  
+		            cell.setCellStyle(contentStyle);  
+	            }
+	        }  
+	        // 自动调整列宽
+	        for (int i = 0; i < titleDs.size(); i++) 
+	        {  
+	        	sheet.autoSizeColumn((short)i);
+	        	int colWidth =sheet.getColumnWidth(i);
+	        	if(colWidth>15000)
+	        	{
+	        		colWidth =50*256;
+	        		sheet.setColumnWidth(i, 50*256);
+	        	}
+	        }  
+	        workbook.write(out);  
+	        out.close();
+	    }  
 
 }

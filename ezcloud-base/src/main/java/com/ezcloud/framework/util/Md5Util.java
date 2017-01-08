@@ -69,7 +69,55 @@ public class Md5Util {
 			return null;
 		}
 	}
+	
+	public final static String get32UppercaseMD5(String s) {
+		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a', 'b', 'c', 'd', 'e', 'f' };
+		try {
+			byte[] strTemp = s.getBytes("UTF-8");
+			// 使用MD5创建MessageDigest对象
+			MessageDigest mdTemp = MessageDigest.getInstance("MD5");
+			mdTemp.update(strTemp);
+			byte[] md = mdTemp.digest();
+			int j = md.length;
+			char str[] = new char[j * 2];
+			int k = 0;
+			for (int i = 0; i < j; i++) {
+				byte b = md[i];
+				// 将没个数(int)b进行双字节加密
+				str[k++] = hexDigits[b >> 4 & 0xf];
+				str[k++] = hexDigits[b & 0xf];
+			}
+			String result =new String(str);
+			result =result.toUpperCase();
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
+	public static String encryptMD5(String data) {
+		String result ="";
+		MessageDigest md5 =null;
+		try {
+			md5 = MessageDigest.getInstance("MD5");
+			md5.update(data.getBytes());
+			result =toHex(md5.digest());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+
+	public static String toHex(byte[] buffer) {
+		StringBuffer sb = new StringBuffer(buffer.length * 2);
+		for (int i = 0; i < buffer.length; i++) {
+			sb.append(Character.forDigit((buffer[i] & 240) >> 4, 16));
+			sb.append(Character.forDigit(buffer[i] & 15, 16));
+		}
+		return sb.toString();
+	}
+	
 	public static void main(String[] args) {
 
 //		String ssss = Md5("123456");

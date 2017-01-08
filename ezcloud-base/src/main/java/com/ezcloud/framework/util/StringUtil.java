@@ -430,5 +430,6 @@ public static String getFileBase64(String paramString)
 	   {
 		   System.out.println("========"+s3[i]);
 	   }
+	   System.out.println("=888======="+getRandKeys(6));
    }
  }

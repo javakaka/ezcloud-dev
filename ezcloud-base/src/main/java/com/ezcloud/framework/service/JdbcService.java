@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
@@ -41,6 +42,8 @@ import com.ezcloud.framework.vo.Row;
  */
 public class JdbcService {
 
+	private static Logger logger =Logger.getLogger(JdbcService.class);
+	
 	@Resource(name = "jdbcTemplate")
 	protected JdbcTemplate jdbcTemplate;
 	protected DataSet dataSet;
@@ -98,6 +101,7 @@ public class JdbcService {
 	// 计算表记录总数
 	@SuppressWarnings("deprecation")
 	public int count(String sql) {
+		logger.debug("sql====================>>" +sql);
 		int total = 0;
 		total = jdbcTemplate.queryForInt(sql);
 		return total;
@@ -132,6 +136,7 @@ public class JdbcService {
 			}
 		}
 		sql += " where " + where;
+		logger.debug("sql====================>>" +sql);
 		rowNum = jdbcTemplate.update(sql);
 		return rowNum;
 	}
@@ -204,7 +209,7 @@ public class JdbcService {
 		}
 		String sql = "";
 		sql += "insert into " + tableName + "(" + colNames + ") values (" + colValues + ")";
-		System.out.println("sql:" + sql);
+		logger.debug("sql====================>>" +sql);
 		rowNum = jdbcTemplate.update(sql);
 		return rowNum;
 	}
@@ -250,6 +255,7 @@ public class JdbcService {
 
 	// 查询一个字段
 	public String queryField(String sql) {
+		logger.debug("sql====================>>" +sql);
 		String fieldValue = null;
 		try {
 			fieldValue = (String) jdbcTemplate.queryForObject(sql, new RowMapper<Object>() {
@@ -260,7 +266,7 @@ public class JdbcService {
 				}
 			});
 		} catch (Exception exp) {
-			System.out.println("jdbc:没有此记录" + sql);
+			logger.debug("jdbc:没有此记录" + sql);
 			fieldValue = null;
 		}
 		return fieldValue;
@@ -312,11 +318,13 @@ public class JdbcService {
 			System.out.println("jdbc:没有此记录" + sql);
 			row = null;
 		}
+		logger.debug("sql====================>>" +sql);
 		return row;
 	}
 
 	// 查询多行数据
 	public DataSet queryDataSet(String sql) {
+		logger.debug("sql====================>>" +sql);
 		final DataSet ds = new DataSet();
 		jdbcTemplate.query(sql, new RowCallbackHandler() {
 			@SuppressWarnings( { "unchecked" })
@@ -349,6 +357,7 @@ public class JdbcService {
 		if (sequence == 1) {
 			sequence = defaultSequenceValue;
 		}
+		logger.debug("sql====================>>" +sql);
 		return sequence;
 	}
 	
@@ -360,20 +369,22 @@ public class JdbcService {
 		if (sequence == 0) {
 			sequence = defaultSequenceValue;
 		}
+		logger.debug("sql====================>>" +sql);
 		return sequence;
 	}
 	
 	// 新增记录时查询主键id的值
-		@SuppressWarnings("deprecation")
-		public int getTableSequenceOfStringToInteger(String tableName, String fieldName, int defaultSequenceValue) {
-			int sequence = 1000;
-			String sql = "select max(" + fieldName + "*1) from " + tableName;
-			sequence = jdbcTemplate.queryForInt(sql) + 1;
-			if (sequence == 0) {
-				sequence = defaultSequenceValue;
-			}
-			return sequence;
+	@SuppressWarnings("deprecation")
+	public int getTableSequenceOfStringToInteger(String tableName, String fieldName, int defaultSequenceValue) {
+		int sequence = 1000;
+		String sql = "select max(" + fieldName + "*1) from " + tableName;
+		sequence = jdbcTemplate.queryForInt(sql) + 1;
+		if (sequence == 0) {
+			sequence = defaultSequenceValue;
 		}
+		logger.debug("sql====================>>" +sql);
+		return sequence;
+	}
 
 	// 从请求中抽取查询限制条件，并拼接为字符串
 	public String addRestrictions(Pageable pageable) {
