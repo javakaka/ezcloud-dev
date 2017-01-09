@@ -78,11 +78,11 @@ public class MonitorWeixinTicketStateJob extends JdbcService{
 			long lcreatemils =Long.parseLong(createmils);
 			long cur_createmils =System.currentTimeMillis() / 1000;
 			long minus =cur_createmils -lcreatemils;
-			if(minus <= 60*30)
+			if(minus >= 60*30)
 			{
 				row.put("state", "0");
 				weixinTicketService.update(row);
-				logger.info("-----------票据过期时间小于30分钟，已更新当前票据为无效----------------");
+				logger.info("-----------票据有效期已超过30分钟，已更新当前票据为无效----------------");
 				Row insertRow =new Row();
 				insertRow.put("pm_id", 1);
 				insertRow.put("state", 1);
@@ -98,7 +98,7 @@ public class MonitorWeixinTicketStateJob extends JdbcService{
 					insertRow.put("ticket", ticket);
 					insertRow.put("createmils", Long.toString(System.currentTimeMillis() / 1000));
 					weixinTicketService.insert(insertRow);
-					logger.info("-----------票据过期时间小于30分钟，重新生成票据---------------");
+					logger.info("-----------票据有效期已超过30分钟，重新拉取票据---------------");
 				}
 			}
 		}
