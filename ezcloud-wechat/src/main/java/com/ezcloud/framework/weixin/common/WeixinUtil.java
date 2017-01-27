@@ -505,11 +505,14 @@ public class WeixinUtil {
 			btn11.setName("爽乐购商城");
 			btn11.setType("view");
 			btn11.setUrl("http://120.76.161.208/jbh/junbinghui/demo/1.html");
-			
+			btn11.setUrl("http://gzfhxxkj.com:7080/jbh/junbinghui/demo/1.html");
+			btn11.setUrl("http://www.tao-fast.com/jbhui/index.do");
+			btn11.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx43b3a03d7c049c92&redirect_uri=http%3A%2F%2Fwww.tao-fast.com%2Fjbhui%2Fwx%2Fsite%2Fbase-auth-score.do&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect");
 			CommonViewBottun btn12 = new CommonViewBottun();
 			btn12.setName("微信商城");
 			btn12.setType("view");
 			btn12.setUrl("http://120.76.161.208/jbh/junbinghui/demo/1.html");
+			btn12.setUrl("http://gzfhxxkj.com:7080/jbh/junbinghui/demo/1.html");
 			
 			CommonViewBottun btn13 = new CommonViewBottun();
 			btn13.setName("商业交流会");
@@ -541,8 +544,8 @@ public class WeixinUtil {
 		public static void main(String s[])
 		{
 			/** 取acces_token **/
-			String appId ="wx5bf17995fe86d1e6";
-			String appSecret ="777ff79bed38a61fe142a7c821318d06";
+			String appId ="wx43b3a03d7c049c92";
+			String appSecret ="af52bd2f25dfcd0e103cbfc6b066e733";
 			AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
 			System.out.println("token ====="+at.getToken());
 			String ticket =WeixinUtil.getTicket(at.getToken());

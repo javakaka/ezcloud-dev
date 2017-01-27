@@ -79,6 +79,7 @@ public class WeixinTicketService  extends JdbcService{
 	 */
 	public void update(Row row ) {
 		String id = row.getString("id", "");
+		row.put("modify_time", DateUtil.getCurrentDateTime());
 		update("wechat_ticket", row, "id='" + id + "'");
 	}
 	
